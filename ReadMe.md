@@ -86,7 +86,7 @@ Docs/
 
 ---
 
-## 🔑 Key Contributions
+## Key Contributions
 
 1. **Methodological:** Rigorous physics-based feature engineering validated on ~5,000 CT slices, transforming raw pixels into interpretable biomarkers
 
@@ -127,3 +127,4 @@ Our results establish a **trustworthiness-performance tradeoff** in medical AI:
 **The 70% ceiling represents the maximum performance achievable while maintaining full interpretability through established radiological principles.**
 
 ---
+
