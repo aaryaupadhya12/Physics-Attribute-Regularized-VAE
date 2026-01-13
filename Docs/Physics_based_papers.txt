@@ -1,0 +1,9 @@
+Bai, H. X., et al. (2020). CT radiomics can help screen the Coronavirus disease 2019 (COVID-19): a preliminary study. Science China Life Sciences, 63, 1388-1390.
+Yang, D., et al. (2021). Diagnostic classification of coronavirus disease 2019 (COVID-19) and other pneumonias using radiomics features in CT chest images. Scientific Reports, 11, 17885.
+Wu, Q., et al. (2021). Machine learning-based CT radiomics model distinguishes COVID-19 from non-COVID-19 pneumonia. BMC Infectious Diseases, 21, 931.
+Oğuz, B. A., et al. (2021). A CT radiomics analysis of COVID-19-related ground-glass opacities and consolidation. PLOS ONE, 16(3), e0246582.
+Riasatian, A., et al. (2021). Diagnosis of COVID-19 Using CT image Radiomics Features: A Comprehensive Machine Learning Study Involving 26,307 Patients. medRxiv.
+Yu, Z., et al. (2021). A deep learning integrated radiomics model for identification of coronavirus disease 2019 using computed tomography. Scientific Reports, 11, 3938.
+Zhang, D., et al. (2021). Radiomics Is Effective for Distinguishing Coronavirus Disease 2019 Pneumonia From Influenza Virus Pneumonia. Frontiers in Public Health, 9, 663965.
+
+
