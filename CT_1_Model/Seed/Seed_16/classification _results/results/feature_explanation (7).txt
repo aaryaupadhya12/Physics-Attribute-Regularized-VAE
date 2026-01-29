@@ -1,0 +1,90 @@
+
+============================================================
+Feature_77
+============================================================
+
+R² (linear combination):     0.673
+R² (with interactions):      0.779
+Improvement from interactions: 0.106
+
+Top 5 Contributing Terms:
+    term  coefficient  abs_coefficient
+  HU_p25    -0.499373         0.499373
+grad_std    -0.451722         0.451722
+  HU_p90    -0.351537         0.351537
+  HU_std     0.306642         0.306642
+   homog    -0.274628         0.274628
+
+→ REDUNDANT: Mostly explained by physics features
+
+============================================================
+Feature_32
+============================================================
+
+R² (linear combination):     0.791
+R² (with interactions):      0.889
+Improvement from interactions: 0.098
+
+Top 5 Contributing Terms:
+    term  coefficient  abs_coefficient
+grad_std    -0.604752         0.604752
+  HU_p50    -0.362583         0.362583
+  HU_p75    -0.257178         0.257178
+   homog    -0.248674         0.248674
+  HU_p10    -0.247593         0.247593
+
+→ REDUNDANT: Mostly explained by physics features
+
+============================================================
+Feature_80
+============================================================
+
+R² (linear combination):     0.664
+R² (with interactions):      0.808
+Improvement from interactions: 0.144
+
+Top 5 Contributing Terms:
+     term  coefficient  abs_coefficient
+ grad_std    -0.708901         0.708901
+mask_area    -0.273268         0.273268
+  mean_HU     0.205784         0.205784
+mask_frac     0.177675         0.177675
+ contrast     0.169967         0.169967
+
+→ REDUNDANT: Mostly explained by physics features
+
+============================================================
+Feature_70
+============================================================
+
+R² (linear combination):     0.480
+R² (with interactions):      0.668
+Improvement from interactions: 0.188
+
+Top 5 Contributing Terms:
+     term  coefficient  abs_coefficient
+   HU_p50     0.314132         0.314132
+   HU_std     0.283564         0.283564
+   HU_p25     0.237782         0.237782
+mask_area     0.235720         0.235720
+  entropy    -0.227027         0.227027
+
+→ INTERACTION: Captures combinations of physics features
+
+============================================================
+Feature_61
+============================================================
+
+R² (linear combination):     0.620
+R² (with interactions):      0.786
+Improvement from interactions: 0.166
+
+Top 5 Contributing Terms:
+    term  coefficient  abs_coefficient
+  HU_std    -0.383747         0.383747
+contrast    -0.333530         0.333530
+grad_std     0.285399         0.285399
+  HU_p10    -0.237234         0.237234
+ entropy     0.223579         0.223579
+
+→ REDUNDANT: Mostly explained by physics features
