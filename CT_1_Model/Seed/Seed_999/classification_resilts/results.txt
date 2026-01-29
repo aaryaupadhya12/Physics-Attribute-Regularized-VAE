@@ -1,0 +1,160 @@
+Total samples: 4682
+Physics features: 14
+Learned features: 71
+
+[1/3] Running correlation analysis...
+
+======================================================================
+CORRELATION ANALYSIS: Physics vs Learned Features
+======================================================================
+/usr/local/lib/python3.11/dist-packages/matplotlib/colors.py:721: RuntimeWarning: invalid value encountered in less
+  xa[xa < 0] = -1
+
+Strongest Correlations (|r| > 0.5):
+
+Feature_78:
+  HU_std: r = 0.631
+
+Feature_61:
+  entropy: r = -0.524
+  HU_p10: r = 0.533
+
+Feature_27:
+  HU_p10: r = -0.556
+
+Feature_31:
+  HU_p10: r = 0.558
+
+[2/3] Running interaction analysis...
+
+Feature_78:
+
+R² (linear combination):     0.595
+R² (with interactions):      0.724
+Improvement from interactions: 0.129
+
+Top 5 Contributing Terms:
+     term  coefficient  abs_coefficient
+   HU_std     0.636305         0.636305
+ contrast     0.383853         0.383853
+  entropy    -0.333786         0.333786
+ grad_std     0.284494         0.284494
+grad_mean    -0.266335         0.266335
+
+→ REDUNDANT: Mostly explained by physics features
+
+Feature_33:
+
+R² (linear combination):     0.434
+R² (with interactions):      0.651
+Improvement from interactions: 0.217
+
+Top 5 Contributing Terms:
+    term  coefficient  abs_coefficient
+grad_std    -0.330661         0.330661
+  HU_p25     0.289043         0.289043
+  HU_p50     0.284799         0.284799
+ entropy     0.242234         0.242234
+ mean_HU    -0.148780         0.148780
+
+→ INTERACTION: Captures combinations of physics features
+
+Feature_75:
+
+R² (linear combination):     0.617
+R² (with interactions):      0.771
+Improvement from interactions: 0.155
+
+Top 5 Contributing Terms:
+     term  coefficient  abs_coefficient
+mask_frac     0.486270         0.486270
+   HU_std     0.443991         0.443991
+   HU_p90     0.436100         0.436100
+ contrast    -0.270592         0.270592
+   HU_p10     0.235846         0.235846
+
+→ REDUNDANT: Mostly explained by physics features
+
+Feature_82:
+
+R² (linear combination):     0.516
+R² (with interactions):      0.670
+Improvement from interactions: 0.154
+
+Top 5 Contributing Terms:
+     term  coefficient  abs_coefficient
+   HU_p10     0.366839         0.366839
+   HU_p25     0.346685         0.346685
+   HU_p90    -0.281712         0.281712
+mask_frac     0.246561         0.246561
+    homog     0.217866         0.217866
+
+→ INTERACTION: Captures combinations of physics features
+
+Feature_61:
+
+R² (linear combination):     0.635
+R² (with interactions):      0.727
+Improvement from interactions: 0.091
+
+Top 5 Contributing Terms:
+     term  coefficient  abs_coefficient
+grad_mean    -0.364826         0.364826
+   HU_p10     0.346461         0.346461
+  entropy    -0.284670         0.284670
+mask_area    -0.263588         0.263588
+   HU_p25     0.250657         0.250657
+
+→ REDUNDANT: Mostly explained by physics features
+
+[3/3] Running overlap analysis...
+
+Feature Overlap Analysis:
+   feature  overlap_coef  cohens_d
+Feature_26      0.921781  0.000289
+    HU_p25      0.921620  0.180481
+Feature_75      0.921207  0.079827
+Feature_41      0.914987  0.019386
+  contrast      0.902247  0.151629
+   entropy      0.899862  0.096063
+ grad_mean      0.891279  0.200943
+Feature_78      0.890069  0.229550
+    HU_p90      0.881857  0.288954
+Feature_57      0.873372  0.234095
+Feature_33      0.871858  0.267496
+Feature_82      0.823299  0.350148
+Feature_61      0.809456  0.440783
+Feature_27      0.761590  0.571969
+Feature_31      0.741857  0.663111
+
+======================================================================
+KEY FINDING: Mean overlap coefficient = 0.868
+
+alidation Set Performance:
+         Classifier  85-dim Acc  14-dim Acc  85-dim AUC  14-dim AUC  Acc Gap (%)   AUC Gap
+         Linear SVM    0.631841    0.618159    0.661401    0.718438     1.368159 -0.057037
+Logistic Regression    0.629353    0.616915    0.661002    0.705851     1.243781 -0.044849
+            RBF SVM    0.614428    0.534826    0.660037    0.544536     7.960199  0.115501
+
+Test Set Performance (Logistic Regression):
+  85-dim: Acc=0.6540, AUC=0.6884
+  14-dim: Acc=0.5721, AUC=0.6111
+  Gap:    8.19% accuracy, 0.0773 AUC
+
+✓ Comparison saved to '85dim_vs_14dim_comparison.csv'
+Comparison plot saved to comparison_85_vs_14.png
+Average accuracy gap: 3.52%
+
+============================================================
+VALIDATION SET RESULTS:
+============================================================
+RBF_SVM        : Acc=0.6144 F1=0.6601 AUC=0.6600
+LogReg         : Acc=0.6294 F1=0.6575 AUC=0.6610
+Linear_SVM     : Acc=0.6318 F1=0.6574 AUC=0.6614
+
+============================================================
+TEST SET RESULTS:
+
+RBF_SVM        : Acc=0.6051 F1=0.6342 AUC=0.6507
+LogReg         : Acc=0.6540 F1=0.6758 AUC=0.6884
+Linear_SVM     : Acc=0.6540 F1=0.6751 AUC=0.6775
