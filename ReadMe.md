@@ -86,10 +86,6 @@ Data_Generator/
 Docs/
 ├── Draft_methodology.pdf        # Detailed methods
 └── Physics_based_papers.txt     # Literature references
-
-requirements.txt
-ReadMe.md
-
 ---
 
 ## Key Contributions
@@ -133,6 +129,7 @@ Our results establish a **trustworthiness-performance tradeoff** in medical AI:
 **The 70% ceiling represents the maximum performance achievable while maintaining full interpretability through established radiological principles.**
 
 ---
+
 
 
 
