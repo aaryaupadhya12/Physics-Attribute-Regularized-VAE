@@ -1,8 +1,6 @@
 # Physics Attribute-Regularized VAE (PAR-VAE)
 ## Beyond Model Performance: A Data-Centric Analysis of COVID-19 CT Classification Ceiling
 
-**Submitted to DATA-FM @ ICLR 2026**
-
 ---
 
 ## Core Question
@@ -127,4 +125,5 @@ Our results establish a **trustworthiness-performance tradeoff** in medical AI:
 **The 70% ceiling represents the maximum performance achievable while maintaining full interpretability through established radiological principles.**
 
 ---
+
 
