@@ -79,10 +79,16 @@ CT_1_Model/          # Mild severity (CT-0 vs CT-1) experiments
 CT_2_Model/          # Moderate severity (CT-0 vs CT-2) experiments
 └── [Same structure as CT_1_Model]
 
+Data_Generator/
+└── data-generator.ipynb
+└── sanity-integrity-validation-checks-final.ipynb
+
 Docs/
 ├── Draft_methodology.pdf        # Detailed methods
 └── Physics_based_papers.txt     # Literature references
-```
+
+requirements.txt
+ReadMe.md
 
 ---
 
@@ -127,5 +133,6 @@ Our results establish a **trustworthiness-performance tradeoff** in medical AI:
 **The 70% ceiling represents the maximum performance achievable while maintaining full interpretability through established radiological principles.**
 
 ---
+
 
 
