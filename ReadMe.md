@@ -1,6 +1,15 @@
 # Physics Attribute-Regularized VAE (PAR-VAE)
 ## Beyond Model Performance: A Data-Centric Analysis of COVID-19 CT Classification Ceiling
 
+
+![Model](https://img.shields.io/badge/Model-VAE-blue)
+![Dataset](https://img.shields.io/badge/Dataset-MosMedData-orange)
+![Accuracy](https://img.shields.io/badge/CT--2%20Accuracy-66.4%25-green)
+![Accuracy](https://img.shields.io/badge/CT--1%20Accuracy-62.6%25-yellowgreen)
+![AUC](https://img.shields.io/badge/AUC-0.746-brightgreen)
+![Features](https://img.shields.io/badge/Physics%20Features-14-purple)
+![Seeds](https://img.shields.io/badge/Reproducibility-3%20Seeds-lightgrey)
+
 ---
 
 ## Core Question
