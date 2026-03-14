@@ -2,7 +2,7 @@
 ## Beyond Model Performance: A Data-Centric Analysis of COVID-19 CT Classification Ceiling
 
 
-![Model](https://img.shields.io/badge/Model-PAR-VAE-blue)
+![Model](https://img.shields.io/badge/Model-VAE-blue)
 ![Dataset](https://img.shields.io/badge/Dataset-MosMedData-orange)
 ![Accuracy](https://img.shields.io/badge/CT--2%20Accuracy-66.4%25-green)
 ![Accuracy](https://img.shields.io/badge/CT--1%20Accuracy-62.6%25-yellowgreen)
