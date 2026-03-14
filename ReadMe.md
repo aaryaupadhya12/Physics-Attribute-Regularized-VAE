@@ -128,7 +128,7 @@ Our results establish a **trustworthiness-performance tradeoff** in medical AI:
 | Approach | Accuracy | Interpretability | Verifiability |
 |----------|----------|------------------|---------------|
 | Physics features only | 66% | Full | 100% |
-| PAR-VAE (physics-constrained) | 70% | High (R²=0.83) | High |
+| PAR-VAE (physics-constrained) | 68% | High (R²=0.83) | High |
 | Black-box CNNs | 95% | None | 0% |
 
 **The 70% ceiling represents the maximum performance achievable while maintaining full interpretability through established radiological principles.**
