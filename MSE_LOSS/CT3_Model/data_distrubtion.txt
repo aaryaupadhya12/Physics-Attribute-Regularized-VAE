@@ -1,39 +1,89 @@
-Mask area:
-Before fix:  146,696 px mean  (28.6% of image — abdominal inclusion)
-After fix:    71,899 px mean  (13.7% of image — clean lung only)
+======================================================================
+RUNNING SANITY CHECKS
+======================================================================
 
-COVID mu_avg:
-Before fix:  -305.83 HU  (contaminated by abdominal tissue)
-After fix:   -504.56 HU  (actual lung parenchyma)
+CHECK 1: File Integrity
+  Total samples: 1,820
+  Missing CT files: 0
+  Missing μ files: 0
+  Missing mask files: 0
 
-The mask area had a problem where the abdominal was getting included with the CT-3 that was fixed with the new data 
-generation code 
+CHECK 2: HU Range & Distribution
+Scanning HU: 100%|██████████| 1000/1000 [00:02<00:00, 450.02it/s]
+  Global HU Statistics (n=1000):
+    Min:  [-1000.0, -1000.0]
+    Max:  [400.0, 400.0]
+    Mean: -599.7 ± 90.9
 
-COVID:  -504.56 HU
-Normal: -575.04 HU
-Delta:  +70.5 HU
+CHECK 3: Mask Integrity
+  Mask Area Statistics:
+    Mean: 145063 pixels
+    Median: 144250 pixels
+    Min: 85544 pixels
+    Max: 203712 pixels
+    Slices with <1000 pixels: 0 (0.00%)
 
-CT-1 delta: ~+30 HU  → AUC 0.679
-CT-2 delta: ~+50 HU  → AUC 0.746
-CT-3 delta: ~+70 HU  → AUC ???  (should be higher)
-The severity gradient should increase the AUC statistically with the previous runs 
+CHECK 4: Slice-Level Coverage
+  Slices per Volume:
+    Mean: 21.2
+    Median: 22.0
+    Range: [16, 30]
 
-hu_std Mann-Whitney p = 0.3927  ← NOT significant
-For the first time when running we see the statical test not giving that much significance comapred to CT-1 anc CT-2 
-In CT-1 and CT-2, HU_std was one of your better discriminating features. For CT-3 severe disease, the consolidation is so extensive it actually homogenises the lung texture — COVID and Normal end up with similar variance because severely consolidated lung fills in the normally high-variance air/vessel contrast. This is actually biologically correct and interesting — you should mention it in the paper.
+CHECK 5: HU Within Mask (Physics Features)
+  μ_avg (HU mean in mask):
+    COVID:  -305.83 ± 81.05
+    Normal: -363.18 ± 71.06
+  HU_std:
+    COVID:  369.29 ± 44.35
+    Normal: 404.92 ± 26.61
 
-COVID:  56.50
-Normal: 57.40
-Delta:  only -0.9  (barely different, p=0.007 but tiny effect)
+CHECK 6: Outlier Detection (IQR Method)
+  mu_avg: 26 outliers (1.43%)
+  hu_std: 102 outliers (5.60%)
+  mask_area_pixels: 0 outliers (0.00%)
+  grad_mean: 35 outliers (1.92%)
 
-The grad mean might not be that discriminative comapred to CT-1 and CT-2 in this use case 
+CHECK 7: Image Quality (Gradient Magnitude)
+  Mean gradient magnitude: 392.38
+  Low quality threshold (5th percentile): 301.40
+  Low quality slices: 91 (5.00%)
 
-CT-1: features significant + high overlap → AUC 0.679
-CT-2: features significant + moderate overlap → AUC 0.746  
-CT-3: hu_std NOT significant, grad barely significant
-      yet density delta is +70 HU (largest of all three)
-      → AUC ??? (pending)
+======================================================================
+CHECK 8: Label Distribution & Split Balance
+======================================================================
+Split  COVID  Normal  Total   COVID %
+Train    636     645   1281 49.648712
+  Val    129     132    261 49.425287
+ Test    145     133    278 52.158273
 
+  Chi-square test (label distribution across splits):
+    χ² = 0.6157, p-value = 0.7350
+ No significant difference in label distribution across splits
 
-THe core Hypothesis remains the same that the statistical siginificance might not be same as the clasisfication discrimination that might be observed woit the radionomics 
-Notably, at CT-3 severity, HU standard deviation showed no significant difference between classes (p=0.39), yet mean HU exhibited the largest inter-class delta observed across all cohorts (+70 HU). This dissociation between feature-level statistical significance and classification performance — observed consistently across severity levels — supports our central finding that individual feature significance is insufficient to predict discriminative capacity
+CHECK 9: Physics Feature Statistical Comparison
+
+  mu_avg:
+    COVID:  μ=-305.83, σ=81.05, n=910
+    Normal: μ=-363.18, σ=71.06, n=910
+    Mann-Whitney U test: U=594361.00, p=0.0000
+    ✓ Significant difference detected!
+
+  hu_std:
+    COVID:  μ=369.29, σ=44.35, n=910
+    Normal: μ=404.92, σ=26.61, n=910
+    Mann-Whitney U test: U=190100.00, p=0.0000
+    ✓ Significant difference detected!
+
+  mask_area_pixels:
+    COVID:  μ=149870.78, σ=24673.88, n=910
+    Normal: μ=140256.06, σ=25845.20, n=910
+    Mann-Whitney U test: U=508423.50, p=0.0000
+    ✓ Significant difference detected!
+
+  grad_mean:
+    COVID:  μ=395.09, σ=129.54, n=910
+    Normal: μ=389.66, σ=57.26, n=910
+    Mann-Whitney U test: U=365134.00, p=0.0000
+    ✓ Significant difference detected!
+Results saved to: /kaggle/working/sanity_checks/
+Summary report: /kaggle/working/sanity_checks/SANITY_CHECK_SUMMARY.txt
