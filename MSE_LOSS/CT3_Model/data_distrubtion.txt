@@ -1,0 +1,39 @@
+Mask area:
+Before fix:  146,696 px mean  (28.6% of image — abdominal inclusion)
+After fix:    71,899 px mean  (13.7% of image — clean lung only)
+
+COVID mu_avg:
+Before fix:  -305.83 HU  (contaminated by abdominal tissue)
+After fix:   -504.56 HU  (actual lung parenchyma)
+
+The mask area had a problem where the abdominal was getting included with the CT-3 that was fixed with the new data 
+generation code 
+
+COVID:  -504.56 HU
+Normal: -575.04 HU
+Delta:  +70.5 HU
+
+CT-1 delta: ~+30 HU  → AUC 0.679
+CT-2 delta: ~+50 HU  → AUC 0.746
+CT-3 delta: ~+70 HU  → AUC ???  (should be higher)
+The severity gradient should increase the AUC statistically with the previous runs 
+
+hu_std Mann-Whitney p = 0.3927  ← NOT significant
+For the first time when running we see the statical test not giving that much significance comapred to CT-1 anc CT-2 
+In CT-1 and CT-2, HU_std was one of your better discriminating features. For CT-3 severe disease, the consolidation is so extensive it actually homogenises the lung texture — COVID and Normal end up with similar variance because severely consolidated lung fills in the normally high-variance air/vessel contrast. This is actually biologically correct and interesting — you should mention it in the paper.
+
+COVID:  56.50
+Normal: 57.40
+Delta:  only -0.9  (barely different, p=0.007 but tiny effect)
+
+The grad mean might not be that discriminative comapred to CT-1 and CT-2 in this use case 
+
+CT-1: features significant + high overlap → AUC 0.679
+CT-2: features significant + moderate overlap → AUC 0.746  
+CT-3: hu_std NOT significant, grad barely significant
+      yet density delta is +70 HU (largest of all three)
+      → AUC ??? (pending)
+
+
+THe core Hypothesis remains the same that the statistical siginificance might not be same as the clasisfication discrimination that might be observed woit the radionomics 
+Notably, at CT-3 severity, HU standard deviation showed no significant difference between classes (p=0.39), yet mean HU exhibited the largest inter-class delta observed across all cohorts (+70 HU). This dissociation between feature-level statistical significance and classification performance — observed consistently across severity levels — supports our central finding that individual feature significance is insufficient to predict discriminative capacity
