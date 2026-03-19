@@ -317,9 +317,6 @@ def check_leakage(train_df, val_df, test_df):
 # MAIN
 # ============================================================
 def main():
-    print("=" * 60)
-    print("COVID-CT-MD LOCAL CPU PREPROCESSING")
-    print("=" * 60)
 
     covid_records  = process_class(COVID_DIR,  label=1, label_name='covid')
     normal_records = process_class(NORMAL_DIR, label=0, label_name='normal')
@@ -346,7 +343,7 @@ def main():
 
     train_p, temp_p, _, temp_l = train_test_split(
         patients, pat_labels, test_size=0.30, random_state=SEED, stratify=pat_labels)
-    val_p, test_p = train_test_split(
+    val_p, test_p, _, _ = train_test_split(
         temp_p, temp_l, test_size=0.50, random_state=SEED, stratify=temp_l)
 
     train_df = df[df['patient_id'].isin(train_p)].reset_index(drop=True)
