@@ -1,0 +1,133 @@
+otal samples: 1638
+Physics features: 14
+Learned features: 71
+
+[1/3] Running correlation analysis...
+
+======================================================================
+CORRELATION ANALYSIS: Physics vs Learned Features
+======================================================================
+/usr/local/lib/python3.11/dist-packages/matplotlib/colors.py:721: RuntimeWarning: invalid value encountered in less
+  xa[xa < 0] = -1
+
+Strongest Correlations (|r| > 0.5):
+
+Feature_49:
+  mask_area: r = 0.583
+
+Feature_70:
+  grad_mean: r = -0.674
+
+Feature_40:
+  HU_p50: r = -0.550
+  grad_std: r = -0.555
+
+Feature_71:
+  HU_p25: r = 0.674
+  mask_area: r = 0.637
+  mean_HU: r = -0.607
+
+[2/3] Running interaction analysis...
+
+Feature_49:
+
+R² (linear combination):     0.697
+R² (with interactions):      0.850
+Improvement from interactions: 0.153
+
+Top 5 Contributing Terms:
+     term  coefficient  abs_coefficient
+mask_area     0.596538         0.596538
+ grad_std    -0.390218         0.390218
+   HU_p75     0.296913         0.296913
+   HU_p25     0.276004         0.276004
+grad_mean    -0.231186         0.231186
+
+→ REDUNDANT: Mostly explained by physics features
+
+Feature_70:
+
+R² (linear combination):     0.717
+R² (with interactions):      0.871
+Improvement from interactions: 0.155
+
+Top 5 Contributing Terms:
+    term  coefficient  abs_coefficient
+  HU_p75    -0.312840         0.312840
+  HU_p90     0.296887         0.296887
+grad_std     0.285609         0.285609
+contrast     0.151402         0.151402
+   homog     0.134168         0.134168
+
+→ REDUNDANT: Mostly explained by physics features
+
+Feature_40:
+
+R² (linear combination):     0.655
+R² (with interactions):      0.836
+Improvement from interactions: 0.182
+
+Top 5 Contributing Terms:
+    term  coefficient  abs_coefficient
+ mean_HU     0.330038         0.330038
+  HU_p50    -0.307768         0.307768
+  HU_p10     0.291058         0.291058
+contrast     0.286158         0.286158
+grad_std    -0.255980         0.255980
+
+→ REDUNDANT: Mostly explained by physics features
+
+Feature_32:
+
+R² (linear combination):     0.451
+R² (with interactions):      0.734
+Improvement from interactions: 0.283
+
+Top 5 Contributing Terms:
+     term  coefficient  abs_coefficient
+   HU_p75     0.272478         0.272478
+   HU_p25     0.243845         0.243845
+  mean_HU     0.205560         0.205560
+mask_area    -0.201046         0.201046
+ contrast     0.178149         0.178149
+
+→ REDUNDANT: Mostly explained by physics features
+
+Feature_33:
+
+R² (linear combination):     0.438
+R² (with interactions):      0.741
+Improvement from interactions: 0.303
+
+Top 5 Contributing Terms:
+    term  coefficient  abs_coefficient
+contrast    -0.285889         0.285889
+  HU_p50     0.202460         0.202460
+  HU_std    -0.182319         0.182319
+ mean_HU     0.178415         0.178415
+ entropy    -0.165325         0.165325
+
+→ REDUNDANT: Mostly explained by physics features
+
+[3/3] Running overlap analysis...
+
+Feature Overlap Analysis:
+   feature  overlap_coef  cohens_d
+Feature_25      0.881905  0.164373
+ mask_frac      0.866436  0.109233
+Feature_71      0.859061  0.262746
+Feature_17      0.846801  0.047454
+Feature_45      0.840898  0.097611
+Feature_33      0.840573  0.321679
+Feature_32      0.828598  0.249093
+Feature_83      0.826305  0.121799
+Feature_40      0.798490  0.515188
+Feature_66      0.797068  0.509240
+Feature_18      0.769604  0.409119
+  grad_std      0.762786  0.479711
+Feature_49      0.738044  0.463394
+Feature_70      0.714939  0.299857
+Feature_61      0.667688  0.746299
+
+======================================================================
+KEY FINDING: Mean overlap coefficient = 0.803
