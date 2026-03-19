@@ -1,0 +1,388 @@
+VALIDATION SET RESULTS:
+============================================================
+RBF_SVM        : Acc=0.9890 F1=0.9895 AUC=0.9972
+LogReg         : Acc=0.9011 F1=0.9053 AUC=0.9778
+Linear_SVM     : Acc=0.9011 F1=0.9043 AUC=0.9767
+
+============================================================
+TEST SET RESULTS:
+============================================================
+RBF_SVM        : Acc=0.9835 F1=0.9829 AUC=0.9993
+LogReg         : Acc=0.9231 F1=0.9186 AUC=0.9828
+Linear_SVM     : Acc=0.9451 F1=0.9419 AUC=0.9820
+============================================================
+
+85-dim Latent Space: (1456, 85)
+14-dim Attributes:   (1456, 14)
+
+ Linear SVM on 85-dim...
+
+Training Linear SVM...
+
+Linear SVM (85-dim) Results:
+Accuracy: 0.9011
+Precision: 0.9239
+Recall: 0.8854
+F1 Score: 0.9043
+AUC-ROC: 0.9767
+
+Confusion Matrix:
+[[79  7]
+ [11 85]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.88      0.92      0.90        86
+       COVID       0.92      0.89      0.90        96
+
+    accuracy                           0.90       182
+   macro avg       0.90      0.90      0.90       182
+weighted avg       0.90      0.90      0.90       182
+
+ Logistic Regression on 85-dim...
+
+Training Logistic Regression...
+
+Logistic Regression (85-dim) Results:
+Accuracy: 0.9011
+Precision: 0.9149
+Recall: 0.8958
+F1 Score: 0.9053
+AUC-ROC: 0.9778
+
+Confusion Matrix:
+[[78  8]
+ [10 86]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.89      0.91      0.90        86
+       COVID       0.91      0.90      0.91        96
+
+    accuracy                           0.90       182
+   macro avg       0.90      0.90      0.90       182
+weighted avg       0.90      0.90      0.90       182
+
+ RBF SVM on 85-dim...
+
+Training RBF SVM...
+
+RBF SVM (85-dim) Results:
+Accuracy: 0.9890
+Precision: 1.0000
+Recall: 0.9792
+F1 Score: 0.9895
+AUC-ROC: 0.9972
+
+Confusion Matrix:
+[[86  0]
+ [ 2 94]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.98      1.00      0.99        86
+       COVID       1.00      0.98      0.99        96
+
+    accuracy                           0.99       182
+   macro avg       0.99      0.99      0.99       182
+weighted avg       0.99      0.99      0.99       182
+
+Linear SVM on 14-dim...
+
+Training Linear SVM...
+
+Linear SVM (14-dim) Results:
+Accuracy: 0.6154
+Precision: 0.6625
+Recall: 0.5521
+F1 Score: 0.6023
+AUC-ROC: 0.7003
+
+Confusion Matrix:
+[[59 27]
+ [43 53]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.58      0.69      0.63        86
+       COVID       0.66      0.55      0.60        96
+
+    accuracy                           0.62       182
+   macro avg       0.62      0.62      0.61       182
+weighted avg       0.62      0.62      0.61       182
+
+ Logistic Regression on 14-dim...
+
+Training Logistic Regression...
+
+Logistic Regression (14-dim) Results:
+Accuracy: 0.6374
+Precision: 0.6875
+Recall: 0.5729
+F1 Score: 0.6250
+AUC-ROC: 0.6982
+
+Confusion Matrix:
+[[61 25]
+ [41 55]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.60      0.71      0.65        86
+       COVID       0.69      0.57      0.62        96
+
+    accuracy                           0.64       182
+   macro avg       0.64      0.64      0.64       182
+weighted avg       0.65      0.64      0.64       182
+
+ RBF SVM on 14-dim...
+
+Training RBF SVM...
+
+RBF SVM (14-dim) Results:
+Accuracy: 0.8462
+Precision: 0.9146
+Recall: 0.7812
+F1 Score: 0.8427
+AUC-ROC: 0.9207
+
+Confusion Matrix:
+[[79  7]
+ [21 75]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.79      0.92      0.85        86
+       COVID       0.91      0.78      0.84        96
+
+    accuracy                           0.85       182
+   macro avg       0.85      0.85      0.85       182
+weighted avg       0.86      0.85      0.85       182
+
+
+LogReg 85-dim (Test) Results:
+Accuracy: 0.9231
+Precision: 0.9294
+Recall: 0.9080
+F1 Score: 0.9186
+AUC-ROC: 0.9828
+
+Confusion Matrix:
+[[89  6]
+ [ 8 79]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.92      0.94      0.93        95
+       COVID       0.93      0.91      0.92        87
+
+    accuracy                           0.92       182
+   macro avg       0.92      0.92      0.92       182
+weighted avg       0.92      0.92      0.92       182
+
+
+LogReg 14-dim (Test) Results:
+Accuracy: 0.6923
+Precision: 0.6632
+Recall: 0.7241
+F1 Score: 0.6923
+AUC-ROC: 0.7359
+
+Confusion Matrix:
+[[63 32]
+ [24 63]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.72      0.66      0.69        95
+       COVID       0.66      0.72      0.69        87
+
+    accuracy                           0.69       182
+   macro avg       0.69      0.69      0.69       182
+weighted avg       0.69      0.69      0.69       182
+
+
+Validation Set Performance:
+         Classifier  85-dim Acc  14-dim Acc  85-dim AUC  14-dim AUC  Acc Gap (%)  AUC Gap
+         Linear SVM    0.901099    0.615385    0.976744    0.700339    28.571429 0.276405
+Logistic Regression    0.901099    0.637363    0.977834    0.698159    26.373626 0.279675
+            RBF SVM    0.989011    0.846154    0.997214    0.920664    14.285714 0.076550
+
+Test Set Performance (Logistic Regression):
+  85-dim: Acc=0.9231, AUC=0.9828
+  14-dim: Acc=0.6923, AUC=0.7359
+  Gap:    23.08% accuracy, 0.2469 AUC
+
+✓ Comparison saved to '85dim_vs_14dim_comparison.csv'
+Comparison plot saved to comparison_85_vs_14.png
+Average accuracy gap: 23.08%
+Dimensionality reduction: 83.5% fewer features
+Interpretability gain: 14 physics features vs 85 black-box dimensions
+
+Training Logistic Regression...
+======================================================================
+Total samples: 1638
+Physics features: 14
+Learned features: 71
+
+[1/3] Running correlation analysis...
+
+======================================================================
+CORRELATION ANALYSIS: Physics vs Learned Features
+======================================================================
+/usr/local/lib/python3.11/dist-packages/matplotlib/colors.py:721: RuntimeWarning: invalid value encountered in less
+  xa[xa < 0] = -1
+
+Strongest Correlations (|r| > 0.5):
+
+Feature_30:
+  HU_p75: r = 0.647
+
+Feature_32:
+  entropy: r = -0.592
+  HU_p75: r = -0.554
+  mask_frac: r = 0.650
+  homog: r = 0.563
+
+Feature_14:
+  HU_p25: r = 0.613
+  HU_p75: r = -0.610
+  mask_frac: r = 0.602
+  homog: r = 0.553
+
+Feature_29:
+  HU_p90: r = 0.649
+  HU_p25: r = 0.520
+  contrast: r = -0.607
+
+Feature_36:
+  HU_std: r = -0.516
+
+Feature_80:
+  HU_p25: r = 0.660
+  homog: r = 0.584
+
+Feature_26:
+  HU_std: r = -0.602
+  mask_frac: r = 0.503
+  homog: r = 0.539
+
+Feature_63:
+  entropy: r = -0.538
+  HU_p75: r = -0.515
+  grad_std: r = -0.631
+  mask_frac: r = 0.561
+  grad_mean: r = -0.562
+
+[2/3] Running interaction analysis...
+
+Feature_30:
+
+R² (linear combination):     0.581
+R² (with interactions):      0.781
+Improvement from interactions: 0.201
+
+Top 5 Contributing Terms:
+     term  coefficient  abs_coefficient
+   HU_p75     0.442384         0.442384
+mask_frac    -0.266843         0.266843
+   HU_p10    -0.232650         0.232650
+   HU_std    -0.220838         0.220838
+   HU_p25    -0.182360         0.182360
+
+→ REDUNDANT: Mostly explained by physics features
+
+Feature_32:
+
+R² (linear combination):     0.680
+R² (with interactions):      0.832
+Improvement from interactions: 0.153
+
+Top 5 Contributing Terms:
+     term  coefficient  abs_coefficient
+  entropy    -0.321879         0.321879
+mask_frac     0.306301         0.306301
+    homog     0.277726         0.277726
+ grad_std     0.250245         0.250245
+   HU_p90    -0.228319         0.228319
+
+→ REDUNDANT: Mostly explained by physics features
+
+Feature_22:
+
+R² (linear combination):     0.626
+R² (with interactions):      0.790
+Improvement from interactions: 0.164
+
+Top 5 Contributing Terms:
+     term  coefficient  abs_coefficient
+ grad_std     0.379141         0.379141
+  mean_HU    -0.327075         0.327075
+grad_mean    -0.252925         0.252925
+   HU_p90    -0.210026         0.210026
+   HU_p10    -0.204372         0.204372
+
+→ REDUNDANT: Mostly explained by physics features
+
+Feature_39:
+
+R² (linear combination):     0.486
+R² (with interactions):      0.748
+Improvement from interactions: 0.261
+
+Top 5 Contributing Terms:
+     term  coefficient  abs_coefficient
+mask_frac    -0.427120         0.427120
+ grad_std    -0.351454         0.351454
+   HU_p90     0.288632         0.288632
+grad_mean    -0.230145         0.230145
+   HU_p75     0.186385         0.186385
+
+→ REDUNDANT: Mostly explained by physics features
+
+Feature_14:
+
+R² (linear combination):     0.681
+R² (with interactions):      0.863
+Improvement from interactions: 0.182
+
+Top 5 Contributing Terms:
+     term  coefficient  abs_coefficient
+   HU_p75    -0.390501         0.390501
+ grad_std     0.334083         0.334083
+mask_frac     0.326027         0.326027
+   HU_p10    -0.233079         0.233079
+   HU_p25     0.200179         0.200179
+
+→ REDUNDANT: Mostly explained by physics features
+
+[3/3] Running overlap analysis...
+
+Feature Overlap Analysis:
+   feature  overlap_coef  cohens_d
+Feature_22      0.831698  0.121057
+  contrast      0.825144  0.215843
+Feature_36      0.819244  0.334547
+Feature_80      0.814815  0.362776
+Feature_26      0.802509  0.379518
+Feature_39      0.789268  0.529020
+  grad_std      0.788347  0.245457
+Feature_32      0.775866  0.008953
+     homog      0.772375  0.436680
+Feature_50      0.772071  0.513589
+Feature_29      0.770606  0.196958
+Feature_14      0.764738  0.357134
+Feature_44      0.721712  0.503224
+Feature_63      0.688702  0.637092
+Feature_30      0.654350  0.910931
+
+======================================================================
+KEY FINDING: Mean overlap coefficient = 0.773
