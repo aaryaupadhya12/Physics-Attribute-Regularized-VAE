@@ -131,3 +131,220 @@ Feature_61      0.667688  0.746299
 
 ======================================================================
 KEY FINDING: Mean overlap coefficient = 0.803
+
+
+
+85-dim Latent Space: (1456, 85)
+14-dim Attributes:   (1456, 14)
+
+ Linear SVM on 85-dim...
+
+Training Linear SVM...
+
+Linear SVM (85-dim) Results:
+Accuracy: 0.9231
+Precision: 0.9659
+Recall: 0.8854
+F1 Score: 0.9239
+AUC-ROC: 0.9575
+
+Confusion Matrix:
+[[83  3]
+ [11 85]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.88      0.97      0.92        86
+       COVID       0.97      0.89      0.92        96
+
+    accuracy                           0.92       182
+   macro avg       0.92      0.93      0.92       182
+weighted avg       0.93      0.92      0.92       182
+
+ Logistic Regression on 85-dim...
+
+Training Logistic Regression...
+
+Logistic Regression (85-dim) Results:
+Accuracy: 0.9176
+Precision: 0.9655
+Recall: 0.8750
+F1 Score: 0.9180
+AUC-ROC: 0.9575
+
+Confusion Matrix:
+[[83  3]
+ [12 84]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.87      0.97      0.92        86
+       COVID       0.97      0.88      0.92        96
+
+    accuracy                           0.92       182
+   macro avg       0.92      0.92      0.92       182
+weighted avg       0.92      0.92      0.92       182
+
+ RBF SVM on 85-dim...
+
+Training RBF SVM...
+
+RBF SVM (85-dim) Results:
+Accuracy: 0.9725
+Precision: 1.0000
+Recall: 0.9479
+F1 Score: 0.9733
+AUC-ROC: 0.9987
+
+Confusion Matrix:
+[[86  0]
+ [ 5 91]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.95      1.00      0.97        86
+       COVID       1.00      0.95      0.97        96
+
+    accuracy                           0.97       182
+   macro avg       0.97      0.97      0.97       182
+weighted avg       0.97      0.97      0.97       182
+
+Linear SVM on 14-dim...
+
+Training Linear SVM...
+
+Linear SVM (14-dim) Results:
+Accuracy: 0.7033
+Precision: 0.7625
+Recall: 0.6354
+F1 Score: 0.6932
+AUC-ROC: 0.7660
+
+Confusion Matrix:
+[[67 19]
+ [35 61]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.66      0.78      0.71        86
+       COVID       0.76      0.64      0.69        96
+
+    accuracy                           0.70       182
+   macro avg       0.71      0.71      0.70       182
+weighted avg       0.71      0.70      0.70       182
+
+ Logistic Regression on 14-dim...
+
+Training Logistic Regression...
+
+Logistic Regression (14-dim) Results:
+Accuracy: 0.6868
+Precision: 0.7468
+Recall: 0.6146
+F1 Score: 0.6743
+AUC-ROC: 0.7660
+
+Confusion Matrix:
+[[66 20]
+ [37 59]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.64      0.77      0.70        86
+       COVID       0.75      0.61      0.67        96
+
+    accuracy                           0.69       182
+   macro avg       0.69      0.69      0.69       182
+weighted avg       0.70      0.69      0.69       182
+
+ RBF SVM on 14-dim...
+
+Training RBF SVM...
+
+RBF SVM (14-dim) Results:
+Accuracy: 0.8626
+Precision: 0.9080
+Recall: 0.8229
+F1 Score: 0.8634
+AUC-ROC: 0.9135
+
+Confusion Matrix:
+[[78  8]
+ [17 79]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.82      0.91      0.86        86
+       COVID       0.91      0.82      0.86        96
+
+    accuracy                           0.86       182
+   macro avg       0.86      0.86      0.86       182
+weighted avg       0.87      0.86      0.86       182
+
+
+LogReg 85-dim (Test) Results:
+Accuracy: 0.9396
+Precision: 0.9524
+Recall: 0.9195
+F1 Score: 0.9357
+AUC-ROC: 0.9820
+
+Confusion Matrix:
+[[91  4]
+ [ 7 80]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.93      0.96      0.94        95
+       COVID       0.95      0.92      0.94        87
+
+    accuracy                           0.94       182
+   macro avg       0.94      0.94      0.94       182
+weighted avg       0.94      0.94      0.94       182
+
+
+LogReg 14-dim (Test) Results:
+Accuracy: 0.7802
+Precision: 0.7765
+Recall: 0.7586
+F1 Score: 0.7674
+AUC-ROC: 0.8252
+
+Confusion Matrix:
+[[76 19]
+ [21 66]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Normal       0.78      0.80      0.79        95
+       COVID       0.78      0.76      0.77        87
+
+    accuracy                           0.78       182
+   macro avg       0.78      0.78      0.78       182
+weighted avg       0.78      0.78      0.78       182
+
+
+Validation Set Performance:
+         Classifier  85-dim Acc  14-dim Acc  85-dim AUC  14-dim AUC  Acc Gap (%)  AUC Gap
+         Linear SVM    0.923077    0.703297    0.957485    0.765988    21.978022 0.191497
+Logistic Regression    0.917582    0.686813    0.957485    0.765988    23.076923 0.191497
+            RBF SVM    0.972527    0.862637    0.998668    0.913517    10.989011 0.085150
+
+Test Set Performance (Logistic Regression):
+  85-dim: Acc=0.9396, AUC=0.9820
+  14-dim: Acc=0.7802, AUC=0.8252
+  Gap:    15.93% accuracy, 0.1568 AUC
+
+✓ Comparison saved to '85dim_vs_14dim_comparison.csv'
+Comparison plot saved to comparison_85_vs_14.png
+Average accuracy gap: 18.68%
+Dimensionality reduction: 83.5% fewer features
+Interpretability gain: 14 physics features vs 85 black-box dimensions
