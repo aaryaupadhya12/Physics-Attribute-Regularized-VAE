@@ -343,7 +343,7 @@ Test Set Performance (Logistic Regression):
   14-dim: Acc=0.7802, AUC=0.8252
   Gap:    15.93% accuracy, 0.1568 AUC
 
-✓ Comparison saved to '85dim_vs_14dim_comparison.csv'
+Comparison saved to '85dim_vs_14dim_comparison.csv'
 Comparison plot saved to comparison_85_vs_14.png
 Average accuracy gap: 18.68%
 Dimensionality reduction: 83.5% fewer features
