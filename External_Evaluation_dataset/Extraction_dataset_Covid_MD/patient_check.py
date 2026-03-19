@@ -4,7 +4,7 @@ from pathlib import Path
 import os
 
 # Check what's actually inside P001
-patient_dir = r"C:\Users\Aarya-2\Downloads\COVID-CT-MD.zip\COVID-19 Cases\P001"
+patient_dir = r"C:\Users\Aarya-2\Documents\ADOG\PAR-VAE\COVID-CT-MD-DATASET\COVID-19 Cases\P001"
 
 print("Files in P001:")
 for f in sorted(Path(patient_dir).iterdir()):

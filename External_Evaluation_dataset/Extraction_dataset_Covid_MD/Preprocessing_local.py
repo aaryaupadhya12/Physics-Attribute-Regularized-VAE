@@ -39,7 +39,7 @@ warnings.filterwarnings('ignore')
 
 DATASET_ROOT = r"C:\Users\Aarya-2\Documents\ADOG\PAR-VAE\COVID-CT-MD-DATASET"
 CSV_DIR      = r"C:\Users\Aarya-2\Documents\ADOG\PAR-VAE\COVID-CT-MD-DATASET"
-OUTPUT_DIR   = r"C:\Users\Aarya-2\Documents\ADOG\PAR-VAE\PAR_VAE++\Physics-Attribute-Regularized-VAE\External_Evaluation_dataset\dataset"
+OUTPUT_DIR   = r"C:\Users\Aarya-2\Documents\ADOG\PAR-VAE\dataset_COVID_MD_PROCESSED"
 
 COVID_DIR    = os.path.join(DATASET_ROOT, "COVID-19 Cases")
 NORMAL_DIR   = os.path.join(DATASET_ROOT, "Normal Cases")
