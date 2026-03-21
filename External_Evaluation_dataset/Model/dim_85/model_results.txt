@@ -1,0 +1,5 @@
+Seed:              16
+Val Avg R²:        0.3668
+Test Avg R²:       0.3220
+Final Val KL:      10.5134
+Final Val Attr:    0.5792
