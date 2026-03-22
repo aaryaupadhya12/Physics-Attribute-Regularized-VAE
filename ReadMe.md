@@ -10,7 +10,6 @@
 ![Features](https://img.shields.io/badge/Physics%20Features-14-blue)
 ![Seeds](https://img.shields.io/badge/Reproducibility-3%20Seeds-lightgrey)
 ![Transfer](https://img.shields.io/badge/Transfer%20AUC-0.745-orange)
-![Conference](https://img.shields.io/badge/MIUA-2026-red)
 
 ---
 
