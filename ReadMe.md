@@ -259,26 +259,3 @@ tqdm==4.67.1
 SimpleITK==2.4.1
 ```
 
----
-
-## Citation
-
-```bibtex
-@inproceedings{upadhya2026parvae,
-  title     = {Why Early COVID-19 Resists Automated Detection:
-               A Radiological Audit of Physics-Based Feature Discriminability},
-  author    = {Upadhya, Aarya and Udyavar, Anshull M},
-  booktitle = {Medical Image Understanding and Analysis (MIUA)},
-  year      = {2026},
-  publisher = {Springer},
-  note      = {LNCS}
-}
-```
-
----
-
-## Acknowledgements
-
-MosMedData provided by the Center for Diagnostics and Telemedicine, Moscow.
-COVID-CT-MD provided via Figshare (doi:10.6084/m9.figshare.12991592).
-PES University, Bengaluru, India.
