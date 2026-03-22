@@ -85,14 +85,6 @@ Frozen MosMed encoder with lightweight predictor adaptation outperforms domain-s
 | Frozen MosMed encoder (zero-shot) | 0.731 | 26.5% |
 | **Frozen encoder + fine-tuned predictor** | **0.745** | **33.0%** |
 
-### Patch Ablation
-
-| Feature Level | Mean Overlap | vs Global |
-|---------------|-------------|-----------|
-| Global (whole lung) | 0.765 | baseline |
-| 3×3 Patch (central) | 0.800 | +0.035 worse |
-| 3×3 Patch (peripheral) | 0.870 | +0.105 worse |
-| Mean patch-level | 0.824 | +0.059 worse |
 
 ### Class Overlap Analysis (3 seeds)
 
