@@ -1,0 +1,8 @@
+Val  | Acc=0.6398  F1=0.6968  AUC=0.7119
+Test | Acc=0.5827 F1=0.6442 AUC=0.6317
+Val  Confusion Matrix:
+[[ 59  73]
+ [ 21 108]]
+Test Confusion Matrix:
+[[ 57  76]
+ [ 40 105]]

@@ -1,0 +1,133 @@
+Train: Total=0.1630 Recon=0.0177 KL=13.3601 Attr=0.0462
+Val: Total=0.3833 Recon=0.0678 KL=11.0474 Attr=0.1033
+Saved reconstruction for epoch 50
+Best model from epoch 41 with val_attr_loss=0.1001
+CHECKPOINT 2: Training Summary
+Final Train Loss: 0.1630
+Final Val Loss:   0.3833
+Final Train KL:   13.3601
+Final Val KL:     11.0474
+Final Train Attr: 0.0462
+Final Val Attr:   0.1033
+KL divergence looks healthy
+
+ Loaded best model
+
+ Extracting features...
+CHECKPOINT 3: Feature Extraction Check
+
+Extracted shapes:
+  Val latents:    (814, 85)
+  Val pred_attrs: (814, 14)
+  Val true_attrs: (814, 14)
+
+Predicted attributes statistics:
+  Min:  -3.6905
+  Max:  4.4446
+  Mean: 0.0182
+  Std:  0.7721
+
+True attributes statistics:
+  Min:  -4.1210
+  Max:  4.6192
+  Mean: 0.0245
+  Std:  0.8759
+
+Both predictions and true values appear normalized
+
+[1] Normalization Statistics:
+Feature               Mean        Std          Status
+mean_HU           297.6917   147.2756            ✓ OK
+HU_std            792.9147    63.8788            ✓ OK
+HU_p10           -778.6163    85.8627            ✓ OK
+HU_p25           -569.1589   375.6687            ✓ OK
+HU_p50            622.5496   352.1492            ✓ OK
+HU_p75            993.0284    63.1225            ✓ OK
+HU_p90           1084.4496    22.3073            ✓ OK
+mask_area       142684.8438 25064.9746            ✓ OK
+mask_frac           0.5443     0.0956            ✓ OK
+grad_mean           0.0725     0.0103            ✓ OK
+grad_std            0.1214     0.0148            ✓ OK
+contrast          311.0720    53.9524            ✓ OK
+homog               0.5906     0.0698            ✓ OK
+entropy             9.0665     1.0117            ✓ OK
+
+[2] Variance Check (Detecting Constant Predictions):
+Feature             Pred Std     True Std          Status
+mean_HU             0.806643     0.879838              OK
+HU_std              0.846041     0.952311              OK
+HU_p10              0.414288     0.456219              OK
+HU_p25              0.865386     1.008958              OK
+HU_p50              0.436986     0.582322              OK
+HU_p75              0.732498     0.969391              OK
+HU_p90              0.676420     0.928961              OK
+mask_area           0.779769     0.844848              OK
+mask_frac           0.788016     0.844847              OK
+grad_mean           0.748385     0.766447              OK
+grad_std            0.799501     0.869352              OK
+contrast            0.819544     0.914254              OK
+homog               0.790539     0.914802              OK
+entropy             0.769209     0.847270              OK
+
+[3] R² Score Analysis:
+Feature                 R²    Pearson r          Status
+mean_HU             0.9125       0.9561       EXCELLENT
+HU_std              0.9003       0.9510       EXCELLENT
+HU_p10              0.5325       0.7489            GOOD
+HU_p25              0.8743       0.9386       EXCELLENT
+HU_p50              0.6799       0.8283            GOOD
+HU_p75              0.8116       0.9170       EXCELLENT
+HU_p90              0.7296       0.8677            GOOD
+mask_area           0.9483       0.9753       EXCELLENT
+mask_frac           0.9497       0.9755       EXCELLENT
+grad_mean           0.8579       0.9307       EXCELLENT
+grad_std            0.9136       0.9604       EXCELLENT
+contrast            0.8076       0.8994       EXCELLENT
+homog               0.8979       0.9524       EXCELLENT
+entropy             0.9389       0.9713       EXCELLENT
+MEAN R²             0.8396
+
+[4] Prediction vs True Value Ranges:
+Feature                        Pred Range                True Range
+mean_HU                 [-1.3042, 2.9381]         [-1.8324, 3.0557]
+HU_std                  [-3.6905, 1.2724]         [-4.1210, 1.5232]
+HU_p10                  [-0.8296, 4.4446]         [-0.5751, 4.6192]
+HU_p25                  [-0.7018, 3.8350]         [-0.5719, 3.5381]
+HU_p50                  [-2.1270, 1.1630]         [-3.4035, 1.1570]
+HU_p75                  [-1.8361, 1.5714]         [-2.7412, 1.6947]
+HU_p90                  [-1.5907, 1.9553]         [-3.4271, 2.6696]
+mask_area               [-1.7283, 2.0795]         [-1.8219, 2.3116]
+mask_frac               [-1.7276, 2.0642]         [-1.8219, 2.3116]
+grad_mean               [-2.0009, 1.9346]         [-2.0947, 2.0197]
+grad_std                [-2.2469, 1.9834]         [-2.6665, 2.4195]
+contrast                [-1.9850, 2.2727]         [-2.2319, 2.8337]
+homog                   [-2.4499, 1.7367]         [-3.3060, 1.8893]
+entropy                 [-1.7578, 1.8408]         [-1.8645, 2.3718]
+TEST SET R² SCORES
+  Feature       R²
+  mean_HU 0.925543
+   HU_std 0.925724
+   HU_p10 0.603376
+   HU_p25 0.856486
+   HU_p50 0.726800
+   HU_p75 0.800975
+   HU_p90 0.748051
+mask_area 0.935296
+mask_frac 0.938051
+grad_mean 0.788576
+ grad_std 0.907979
+ contrast 0.817057
+    homog 0.884445
+  entropy 0.927453
+
+Test Avg R²: 0.8418
+
+Generating visualizations...
+
+Saving outputs...
+TRAINING COMPLETE - FINAL SUMMARY
+Seed:              42
+Val Avg R²:        0.8396
+Test Avg R²:       0.8418
+Final Val KL:      11.0474
+Final Val Attr:    0.1033

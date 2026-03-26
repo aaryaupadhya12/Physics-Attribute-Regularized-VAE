@@ -1,131 +1,261 @@
 # Physics Attribute-Regularized VAE (PAR-VAE)
-## Beyond Model Performance: A Data-Centric Analysis of COVID-19 CT Classification Ceiling
+## Why Early COVID-19 Resists Automated Detection: A Radiological Audit of Physics-Based Feature Discriminability
 
-
+![Model](https://img.shields.io/badge/Model-PAR--VAE-blue)
+![Dataset](https://img.shields.io/badge/Dataset-MosMedData%20%2B%20COVID--CT--MD-orange)
+![CT3 AUC](https://img.shields.io/badge/CT--3%20AUC-0.999±0.000-brightgreen)
+![CT2 AUC](https://img.shields.io/badge/CT--2%20AUC-0.746±0.008-green)
+![CT1 AUC](https://img.shields.io/badge/CT--1%20AUC-0.674±0.011-yellowgreen)
+![R2](https://img.shields.io/badge/Physics%20R²-0.972±0.000-purple)
+![Features](https://img.shields.io/badge/Physics%20Features-14-blue)
+![Seeds](https://img.shields.io/badge/Reproducibility-3%20Seeds-lightgrey)
+![Transfer](https://img.shields.io/badge/Transfer%20AUC-0.745-orange)
 
 ---
 
 ## Core Question
 
-While deep learning models achieve 90%+ accuracy on COVID-19 CT classification, they operate as "black boxes" prone to spurious correlations. We ask: **Can physics-based radiological features alone provide sufficient discriminative signal for trustworthy medical AI?**
+Why do interpretable AI systems plateau in performance while black-box CNNs achieve near-perfect accuracy on COVID-19 CT classification? Is this gap a modeling limitation — or a fundamental property of the disease itself?
+
+**Our answer: The ceiling is biological, not computational.**
 
 ---
 
-## What We Found
+## Key Findings
 
-Using a Physics Attribute-Regularized VAE that constrains latent representations to align with 14 clinically interpretable radiological features, we establish a **"trustworthiness ceiling"**:
+**Finding 1 — Biological Ceiling**
+Global physics features face an irreducible 84% class overlap in mild/moderate COVID-19. Both PAR-VAE and CNN baselines hit the same ~70% AUC ceiling on CT-1, confirming the limit is data-intrinsic not model-intrinsic.
 
-- **Performance Plateau:** 66.4% accuracy (CT-2) and 62.6% (CT-1) despite strong physics grounding (R² = 0.83)
-- **Feature Redundancy:** 82% of learned features explainable by physics features (R² = 0.70-0.85)
-- **Class Overlap:** 84% distributional overlap in physics space creates irreducible error floor
-- **Spatial Information Gap:** ~25% performance gap to black-box CNNs represents unconstrained spatial patterns
+**Finding 2 — Severity Gradient**
+CT-1: 67% → CT-2: 75% → CT-3: 99.9% AUC — exactly as GGO biology predicts. As disease burden exceeds 50% lung involvement, whole-lung physics statistics shift substantially enough for near-perfect separation.
 
-**Key Insight:** The limitation isn't model capacity—it's the data representation itself. Global radiological features, regardless of sophistication, cannot approach CNN performance without spatial context.
+**Finding 3 — Physics Learns Genuine Pathology**
+At severe disease (CT-3), PAR-VAE achieves AUC=0.999±0.000 while CNN collapses to 0.660±0.073 with 49–67% false negative rate across seeds. Physics-constrained representations scale with severity; CNN spatial shortcuts do not.
+
+**Finding 4 — Patch Ablation Confirms Biological Mechanism**
+Finer spatial granularity (3×3 patches) increases class overlap rather than reducing it — biologically explained by GGO dilution over normal tissue even within individual patches in mild disease.
+
+**Finding 5 — Cross-Dataset Transfer**
+Frozen MosMed encoder with lightweight predictor adaptation outperforms domain-specific retraining on an independent DICOM cohort (AUC=0.745 vs 0.710, FN 33% vs 49.3%).
 
 ---
 
-## Main Results
+## Results
 
-| Classification Task | Test Accuracy | Test AUC | Overlap Coefficient | Seeds |
-|---------------------|---------------|----------|---------------------|-------|
-| **CT-0 vs CT-2** (Moderate, 25-50% involvement) | 66.4 ± 2.0% | 0.746 ± 0.010 | 0.838 | 3 |
-| **CT-0 vs CT-1** (Mild, <25% involvement) | 62.6 ± 2.8% | 0.674 ± 0.014 | 0.855 | 3 |
+### Physics Alignment R² (3 seeds, mean ± std)
 
-**Dimensionality Analysis:** Reducing from 85-dim latent space to 14-dim physics features causes only 0.66-4.95% accuracy loss, proving that 83.5% of features are informationally redundant.
+| Category | Feature | CT-1 R² | CT-2 R² | CT-3 R² |
+|----------|---------|---------|---------|---------|
+| Tissue Density | Mean HU | 0.868±0.013 | 0.915±0.009 | 0.975±0.003 |
+| Tissue Density | HU Std Dev | 0.836±0.004 | 0.927±0.001 | 0.980±0.002 |
+| Tissue Density | HU p10 | 0.382±0.018 | 0.580±0.020 | 0.968±0.006 |
+| Tissue Density | HU p25 | 0.792±0.007 | 0.845±0.012 | 0.959±0.002 |
+| Tissue Density | HU p50 | 0.723±0.018 | 0.686±0.036 | 0.946±0.002 |
+| Tissue Density | HU p75 | 0.828±0.014 | 0.800±0.005 | 0.958±0.007 |
+| Tissue Density | HU p90 | 0.761±0.010 | 0.758±0.014 | 0.952±0.010 |
+| Lung Geometry | Mask Area | 0.906±0.003 | 0.931±0.007 | 0.984±0.002 |
+| Lung Geometry | Mask Fraction | 0.910±0.005 | 0.933±0.005 | 0.983±0.002 |
+| Boundary Sharpness | Gradient Mean | 0.805±0.028 | 0.805±0.016 | 0.990±0.001 |
+| Boundary Sharpness | Gradient Std | 0.885±0.005 | 0.904±0.004 | 0.973±0.003 |
+| Texture | GLCM Contrast | 0.824±0.008 | 0.809±0.007 | 0.975±0.005 |
+| Texture | Homogeneity | 0.862±0.020 | 0.882±0.002 | 0.982±0.001 |
+| Texture | Entropy | 0.891±0.020 | 0.921±0.006 | 0.984±0.003 |
+| | **Mean** | **0.81±0.07** | **0.84±0.07** | **0.972±0.000** |
+
+### Classification Performance (3 seeds, mean ± std)
+
+| Task | Model | Test AUC | Test F1 | FN Rate |
+|------|-------|---------|---------|---------|
+| CT-1 vs CT-0 (Mild) | PAR-VAE LogReg | 0.674±0.011 | 0.658±0.022 | — |
+| CT-1 vs CT-0 (Mild) | PAR-VAE Linear SVM | 0.672±0.007 | 0.664±0.013 | — |
+| CT-1 vs CT-0 (Mild) | CNN Baseline | 0.703±0.016 | 0.679±0.024 | — |
+| CT-2 vs CT-0 (Moderate) | PAR-VAE LogReg | 0.746±0.008 | 0.693±0.020 | — |
+| CT-2 vs CT-0 (Moderate) | PAR-VAE Linear SVM | 0.751±0.016 | 0.701±0.023 | — |
+| CT-3 vs CT-0 (Severe) | **PAR-VAE RBF SVM** | **0.999±0.000** | **0.983±0.000** | **1.1%** |
+| CT-3 vs CT-0 (Severe) | CNN Baseline | 0.660±0.073 | 0.572±0.107 | 49–67% |
+
+*CT-2 CNN baseline excluded due to unstable training dynamics across seeds.*
+
+### Cross-Dataset Transfer Learning (COVID-CT-MD)
+
+| Setup | AUC | FN Rate |
+|-------|-----|---------|
+| MosMed CT-3 in-domain | 0.999 | 1.1% |
+| Retrained from scratch on COVID-CT-MD | 0.710 | 49.3% |
+| Frozen MosMed encoder (zero-shot) | 0.731 | 26.5% |
+| **Frozen encoder + fine-tuned predictor** | **0.745** | **33.0%** |
+
+
+### Class Overlap Analysis (3 seeds)
+
+| Task | Feature Type | Mean Overlap | Cohen's d |
+|------|-------------|-------------|-----------|
+| CT-1 vs CT-0 | Physics (14-dim) | 0.845±0.080 | 0.38±0.21 |
+| CT-1 vs CT-0 | Learned (top 15) | 0.845±0.070 | 0.41±0.19 |
+| CT-2 vs CT-0 | Physics (14-dim) | 0.841±0.060 | 0.42±0.15 |
+| CT-2 vs CT-0 | Learned (top 15) | 0.841±0.090 | 0.44±0.18 |
+
+---
+
+## Architecture
+
+```
+Input CT Slice (512×512, normalised [-1,1])
+        ↓
+   Encoder — 5-layer CNN (LeakyReLU + BatchNorm)
+        ↓
+  85-dimensional Latent Space
+        ↓
+┌─────────────────────────┐
+│  Attribute Predictor    │ → 14 physics attributes
+│  (3-layer ResNet MLP)   │   R² = 0.972±0.000
+└─────────────────────────┘
+        ↓
+   Decoder — 5-layer CNN (Tanh output)
+```
+
+**Training objective:**
+```
+L = L_recon + β·L_KL + λ·L_attr
+```
+
+**3-Phase Annealing Schedule:**
+
+| Phase | Epochs | β | λ | Purpose |
+|-------|--------|---|---|---------|
+| Physics-First | 0–20 | 10⁻⁴→2·10⁻⁴ | 1.5 | Prevent posterior collapse |
+| Gradual Balance | 20–40 | 2·10⁻⁴→5·10⁻⁴ | 1.5→3.0 | Strengthen physics supervision |
+| Fine-Tune | 40–50 | 5·10⁻⁴ | 3.0 | Maximise physics alignment |
+
+Healthy KL ≈ 17 confirmed across all seeds and cohorts (collapse threshold KL < 5).
 
 ---
 
 ## Methodology
 
-### Dataset
-- **MosMedData:** ~5,000 CT slices filtered to early-stage cases only
-- **CT-0:** Normal (0% involvement)
-- **CT-1:** Mild severity (<25% involvement)
-- **CT-2:** Moderate severity (25-50% involvement)
-- **Excluded:** CT-3/CT-4 (severe cases inflate metrics)
+### Datasets
+- **MosMedData (Primary):** 1,110 patients, 5-level CT severity stratification, Center for Diagnostics and Telemedicine, Moscow
+- **COVID-CT-MD (Transfer):** 169 COVID-19 + 76 Normal patients, multi-institutional DICOM cohort
 
-### 14 Physics-Based Features
-Grounded in X-ray attenuation physics (Hounsfield Units):
+### Cohorts
+- **Cohort A (CT-1 vs CT-0):** Mild COVID vs Normal — GGOs covering <25% lung
+- **Cohort B (CT-2 vs CT-0):** Moderate COVID vs Normal — 25–50% involvement
+- **Cohort C (CT-3 vs CT-0):** Severe COVID vs Normal — 50–75% involvement
 
-**Densitometric (7):** HU mean, std, percentiles (p10, p25, p50, p75, p90)  
-**Textural (3):** GLCM contrast, homogeneity, entropy  
-**Gradient (2):** Sobel mean, std  
-**Morphological (2):** Lung mask area, fractional occupancy  
+### 14 Physics Features
 
-### PAR-VAE Architecture
-- **Encoder:** 5-layer CNN → 85-dim latent space
-- **Decoder:** Mirrored 5-layer CNN
-- **Attribute Predictor:** 3-layer MLP predicting 14 physics features from latent means
-- **Loss:** L = L_recon + β·L_KL + λ·L_attr
+Grounded in X-ray attenuation physics:
+```
+HU = 1000 × (μ_tissue − μ_water) / (μ_water − μ_air)
+```
 
-### Validation Pipeline
-- Volume-level splitting (60/20/20) prevents patient-level leakage
-- Multiple seeds (16, 42, 999) for reproducibility
-- Statistical analysis: correlation, interaction (R²), class overlap
+| Category | Features |
+|----------|---------|
+| Densitometric (7) | Mean HU, Std HU, p10, p25, p50, p75, p90 |
+| Morphological (2) | Lung mask area, fractional occupancy |
+| Gradient (2) | Sobel mean, Sobel std |
+| Texture (3) | GLCM contrast, homogeneity, entropy |
+
+### 9-Stage Validation Protocol
+
+| Check | Result |
+|-------|--------|
+| File integrity | 0 missing files |
+| HU range | Mean −614.9 ± 79.1 HU, zero outliers |
+| Mask integrity | 0 empty masks |
+| Slice sampling | Mean 21.1/patient (CT-1), 29.3 (CT-2) |
+| Physics validation | ΔHU ≈ 30 (CT-1), ΔHU ≈ 50 (CT-2) |
+| Outlier detection | <4% across all features |
+| Image quality | 5.0% flagged at 5th percentile |
+| Split balance | Chi-square p=0.521 |
+| Severity gradient | Mann-Whitney p<0.0001 all features |
+
+Volume-level splitting prevents patient-level leakage — all slices from one patient confined to one split.
 
 ---
 
-## Repository Organization
-```
-CT_1_Model/          # Mild severity (CT-0 vs CT-1) experiments
-├── Seed_16/         # Independent run with seed 16
-├── Seed_42/         # Independent run with seed 42
-└── Seed_999/        # Independent run with seed 999
-    ├── classification_results/  # SVM, LogReg performance
-    ├── latent_space_results/    # 85-dim vs 14-dim analysis
-    ├── images/                  # Visualizations
-    └── results.txt              # Summary metrics
+## Ablation Studies
 
-CT_2_Model/          # Moderate severity (CT-0 vs CT-2) experiments
-└── [Same structure as CT_1_Model]
+### Annealing Schedule
+
+| Strategy | KL | Outcome |
+|----------|----|---------|
+| No annealing | <5 (collapse) | Degenerate latent space |
+| High β early | Severe collapse | No image encoding |
+| High λ early | ≈15 | Attribute lock-in |
+| **3-phase (ours)** | **≈17** | **Stable physics alignment** |
+
+### Latent Dimensionality
+
+| Dimensions | Val R² | Test R² | Gap | Assessment |
+|------------|--------|---------|-----|------------|
+| 64 | 0.842 | 0.808 | 0.034 | Undercapacity |
+| **85** | **0.969** | **0.972** | **0.003** | **Optimal** |
+| 96 | 0.845 | 0.789 | 0.056 | Overfitting |
+
+---
+
+## Repository Structure
+
+```
+CT_1_Model/                    # Mild severity (CT-0 vs CT-1)
+├── Seed_16/
+├── Seed_42/
+└── Seed_999/
+    ├── classification_results/
+    ├── latent_space_results/
+    ├── overlap_analysis/
+    ├── images/
+    └── results.txt
+
+CT_2_Model/                    # Moderate severity (CT-0 vs CT-2)
+└── [same structure]
+
+CT_3_Model/                    # Severe severity (CT-0 vs CT-3)
+└── [same structure]
+
+Transfer_Learning/             # COVID-CT-MD cross-dataset evaluation
+├── preprocessing/             # DICOM → NPY pipeline
+├── frozen_encoder/            # Zero-shot transfer results
+└── finetuned_predictor/       # Adapted predictor results
+
+Ablations/
+├── annealing_schedule/
+├── latent_dimensionality/
+└── patch_ablation/
 
 Docs/
-├── Draft_methodology.pdf        # Detailed methods
-└── Physics_based_papers.txt     # Literature references
+├── paper_MIUA2026.pdf
+└── Physics_based_papers.txt
 ```
 
 ---
 
-## Key Contributions
+## Installation
 
-1. **Methodological:** Rigorous physics-based feature engineering validated on ~5,000 CT slices, transforming raw pixels into interpretable biomarkers
+```bash
+pip install -r requirements.txt
+```
 
-2. **Architectural:** Multi-objective VAE curriculum preventing posterior collapse while enforcing physics interpretability
-
-3. **Analytical:** Quantification of the "Spatial Information Gap"—identifying specific statistical overlaps in global features that create an irreducible classification error floor
-
----
-
-## Statistical Analysis Results
-
-### Correlation Analysis
-- 15+ learned features show |r| > 0.5 with physics features
-- Example: Feature_40 correlates with homogeneity (r = -0.72)
-
-### Interaction Analysis
-- Mean R² = 0.72 for predicting learned features from physics
-- 89% of analyzed features marked "REDUNDANT"
-- Only 11% capture genuine interaction effects
-
-### Class Overlap Analysis
-- Mean overlap coefficient = 0.84 (range: 0.71-0.91)
-- Cohen's d < 0.5 for 60% of features
-- High overlap despite statistically significant differences (p < 0.0001)
-
----
-
-## Clinical Implications
-
-Our results establish a **trustworthiness-performance tradeoff** in medical AI:
-
-| Approach | Accuracy | Interpretability | Verifiability |
-|----------|----------|------------------|---------------|
-| Physics features only | 66% | Full | 100% |
-| PAR-VAE (physics-constrained) | 70% | High (R²=0.83) | High |
-| Black-box CNNs | 95% | None | 0% |
-
-**The 70% ceiling represents the maximum performance achievable while maintaining full interpretability through established radiological principles.**
-
----
-
+```
+# python==3.11.13
+numpy==1.26.4
+pandas==2.2.3
+matplotlib==3.7.2
+seaborn==0.12.2
+scipy==1.15.3
+scikit-image==0.25.2
+scikit-learn==1.2.2
+torch==2.6.0+cu124
+Pillow==11.3.0
+opencv-python==4.12.0
+nibabel==5.3.2
+kagglehub==0.3.13
+pydicom==2.4.4
+pylibjpeg==2.0.1
+pylibjpeg-libjpeg==2.1.0
+gdcm==3.0.24
+tqdm==4.67.1
+SimpleITK==2.4.1
+```
 

@@ -1,0 +1,89 @@
+======================================================================
+RUNNING SANITY CHECKS
+======================================================================
+
+CHECK 1: File Integrity
+  Total samples: 1,820
+  Missing CT files: 0
+  Missing μ files: 0
+  Missing mask files: 0
+
+CHECK 2: HU Range & Distribution
+Scanning HU: 100%|██████████| 1000/1000 [00:02<00:00, 450.02it/s]
+  Global HU Statistics (n=1000):
+    Min:  [-1000.0, -1000.0]
+    Max:  [400.0, 400.0]
+    Mean: -599.7 ± 90.9
+
+CHECK 3: Mask Integrity
+  Mask Area Statistics:
+    Mean: 145063 pixels
+    Median: 144250 pixels
+    Min: 85544 pixels
+    Max: 203712 pixels
+    Slices with <1000 pixels: 0 (0.00%)
+
+CHECK 4: Slice-Level Coverage
+  Slices per Volume:
+    Mean: 21.2
+    Median: 22.0
+    Range: [16, 30]
+
+CHECK 5: HU Within Mask (Physics Features)
+  μ_avg (HU mean in mask):
+    COVID:  -305.83 ± 81.05
+    Normal: -363.18 ± 71.06
+  HU_std:
+    COVID:  369.29 ± 44.35
+    Normal: 404.92 ± 26.61
+
+CHECK 6: Outlier Detection (IQR Method)
+  mu_avg: 26 outliers (1.43%)
+  hu_std: 102 outliers (5.60%)
+  mask_area_pixels: 0 outliers (0.00%)
+  grad_mean: 35 outliers (1.92%)
+
+CHECK 7: Image Quality (Gradient Magnitude)
+  Mean gradient magnitude: 392.38
+  Low quality threshold (5th percentile): 301.40
+  Low quality slices: 91 (5.00%)
+
+======================================================================
+CHECK 8: Label Distribution & Split Balance
+======================================================================
+Split  COVID  Normal  Total   COVID %
+Train    636     645   1281 49.648712
+  Val    129     132    261 49.425287
+ Test    145     133    278 52.158273
+
+  Chi-square test (label distribution across splits):
+    χ² = 0.6157, p-value = 0.7350
+ No significant difference in label distribution across splits
+
+CHECK 9: Physics Feature Statistical Comparison
+
+  mu_avg:
+    COVID:  μ=-305.83, σ=81.05, n=910
+    Normal: μ=-363.18, σ=71.06, n=910
+    Mann-Whitney U test: U=594361.00, p=0.0000
+    ✓ Significant difference detected!
+
+  hu_std:
+    COVID:  μ=369.29, σ=44.35, n=910
+    Normal: μ=404.92, σ=26.61, n=910
+    Mann-Whitney U test: U=190100.00, p=0.0000
+    ✓ Significant difference detected!
+
+  mask_area_pixels:
+    COVID:  μ=149870.78, σ=24673.88, n=910
+    Normal: μ=140256.06, σ=25845.20, n=910
+    Mann-Whitney U test: U=508423.50, p=0.0000
+    ✓ Significant difference detected!
+
+  grad_mean:
+    COVID:  μ=395.09, σ=129.54, n=910
+    Normal: μ=389.66, σ=57.26, n=910
+    Mann-Whitney U test: U=365134.00, p=0.0000
+    ✓ Significant difference detected!
+Results saved to: /kaggle/working/sanity_checks/
+Summary report: /kaggle/working/sanity_checks/SANITY_CHECK_SUMMARY.txt
