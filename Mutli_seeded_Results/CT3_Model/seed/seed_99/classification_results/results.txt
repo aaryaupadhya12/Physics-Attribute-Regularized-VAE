@@ -348,3 +348,5 @@ Comparison plot saved to comparison_85_vs_14.png
 Average accuracy gap: 18.68%
 Dimensionality reduction: 83.5% fewer features
 Interpretability gain: 14 physics features vs 85 black-box dimensions
+
+KEY FINDING: Mean overlap coefficient = 0.803
