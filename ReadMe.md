@@ -198,36 +198,74 @@ Volume-level splitting prevents patient-level leakage — all slices from one pa
 ## Repository Structure
 
 ```
-CT_1_Model/                    # Mild severity (CT-0 vs CT-1)
-├── Seed_16/
-├── Seed_42/
-└── Seed_999/
-    ├── classification_results/
-    ├── latent_space_results/
-    ├── overlap_analysis/
-    ├── images/
-    └── results.txt
+data/
+  external_evaluation/
+    dataset/
+      full_balanced.csv
+      train.csv
+      val.csv
+      test.csv
+      verification_grid_covid.png
+      verification_grid_normal.png
 
-CT_2_Model/                    # Moderate severity (CT-0 vs CT-2)
-└── [same structure]
+code/
+  external_evaluation/
+    scripts/
+      Extraction_dataset_Covid_MD/
+        1_patient_extraction.py
+        create_CSV.py
+        patient_check.py
+        Preprocessing_local.py
+        test_structure.py
 
-CT_3_Model/                    # Severe severity (CT-0 vs CT-3)
-└── [same structure]
+models/
+  external_evaluation/
+    dim_85/
+      model_results.txt
+  transfer_learned_pth_files/
+    Transfer_learned_pth_files/
+      seed/
+        CT3/
+          seed_999_CT3/
+            best_arsivae_improved (13).pth
 
-Transfer_Learning/             # COVID-CT-MD cross-dataset evaluation
-├── preprocessing/             # DICOM → NPY pipeline
-├── frozen_encoder/            # Zero-shot transfer results
-└── finetuned_predictor/       # Adapted predictor results
+notebooks/
+  data_generator/
+    data-generator (1).ipynb
+    ReadMe.md
+    sanity-integrity-validation-checks-final (4).ipynb
+  external_evaluation/
+    COVID_MD_retrain.ipynb
 
-Ablations/
-├── annealing_schedule/
-├── latent_dimensionality/
-└── patch_ablation/
+results/
+  cnn_resnet/
+  multi_seeded/
+  external_evaluation/
+  paper_tables/
 
-Docs/
-├── paper_MIUA2026.pdf
-└── Physics_based_papers.txt
+docs/
+  MIUA/
+  Physics_based_papers.txt
+
+papers/
+  MIUA_2026_Supp.pdf
+  Springer_Lecture_Notes_in_Computer_Science (5) (1).pdf
+
+LICENSE
+ReadMe.md
+requirements.txt
+.gitignore
 ```
+
+### How to navigate
+
+- `data/` contains external evaluation datasets and verification artifacts.
+- `code/` contains preprocessing and dataset extraction scripts.
+- `notebooks/` contains development and analysis notebooks.
+- `models/` contains saved model outputs and weights.
+- `results/` contains experimental outputs, plots, and seed-based result directories.
+- `docs/` contains reference material and supplementary documentation.
+- `papers/` contains final paper PDFs and related supporting files.
 
 ---
 
