@@ -102,20 +102,7 @@ R² drop from 0.972 → 0.320 quantifies the scanner calibration gap (ΔHU = 482
 ## Architecture
 
 ```
-Input CT Slice (512×512)
-        ↓
-   Encoder — 5-layer CNN (LeakyReLU + BatchNorm)
-        ↓
-  85-dimensional Latent Space
-   ├── 14 dims regularised toward physics attributes
-   └── 71 dims free for residual spatial information
-        ↓
-┌─────────────────────────────┐
-│   Physics Attribute         │ → 14 clinical attributes (R² = 0.972)
-│   Predictor (3-layer MLP)   │
-└─────────────────────────────┘
-        ↓
-   Decoder — 5-layer CNN (Tanh output)
+![PAR-VAE Architecture](Image/Architecture_PARVAE.png)
 ```
 
 **Training Objective:**
