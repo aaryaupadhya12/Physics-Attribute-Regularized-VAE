@@ -1,123 +1,124 @@
 # Physics Attribute-Regularized VAE (PAR-VAE)
-## Why Early COVID-19 Resists Automated Detection: A Radiological Audit of Physics-Based Feature Discriminability
+## A Physics-Constrained Generative Audit of CT Severity Classification
 
 ![Model](https://img.shields.io/badge/Model-PAR--VAE-blue)
 ![Dataset](https://img.shields.io/badge/Dataset-MosMedData%20%2B%20COVID--CT--MD-orange)
-![CT3 AUC](https://img.shields.io/badge/CT--3%20AUC-0.999±0.000-brightgreen)
-![CT2 AUC](https://img.shields.io/badge/CT--2%20AUC-0.746±0.008-green)
-![CT1 AUC](https://img.shields.io/badge/CT--1%20AUC-0.674±0.011-yellowgreen)
-![R2](https://img.shields.io/badge/Physics%20R²-0.972±0.000-purple)
+![S3 AUC](https://img.shields.io/badge/S3%20AUC-99.3±1.0%25-brightgreen)
+![S2 AUC](https://img.shields.io/badge/S2%20AUC-74.6±0.8%25-green)
+![S1 AUC](https://img.shields.io/badge/S1%20AUC-67.4±1.4%25-yellowgreen)
+![Physics R2](https://img.shields.io/badge/Physics%20R²-0.972-purple)
 ![Features](https://img.shields.io/badge/Physics%20Features-14-blue)
 ![Seeds](https://img.shields.io/badge/Reproducibility-3%20Seeds-lightgrey)
-![Transfer](https://img.shields.io/badge/Transfer%20AUC-0.745-orange)
 
 ---
 
 ## Core Question
 
-Why do interpretable AI systems plateau in performance while black-box CNNs achieve near-perfect accuracy on COVID-19 CT classification? Is this gap a modeling limitation — or a fundamental property of the disease itself?
+When a physics-grounded model underperforms a black-box CNN on COVID-19 CT classification, is the gap a modeling failure — or a fundamental biological property of the disease?
 
 **Our answer: The ceiling is biological, not computational.**
 
 ---
 
-
-![Model Architecture](Image/Architecture_PARVAE.png)
-
 ## Key Findings
 
-**Finding 1 — Biological Ceiling**
-Global physics features face an irreducible 84% class overlap in mild/moderate COVID-19. Both PAR-VAE and CNN baselines hit the same ~70% AUC ceiling on CT-1, confirming the limit is data-intrinsic not model-intrinsic.
+**Finding 1 — Biological Ceiling at Mild Disease**  
+Global physics features face an irreducible 84% class overlap at mild COVID-19 (S1). Both PAR-VAE and CNN baselines converge at ~67–70% AUC on S1, confirming the limit is data-intrinsic, not model-intrinsic.
 
-**Finding 2 — Severity Gradient**
-CT-1: 67% → CT-2: 75% → CT-3: 99.9% AUC — exactly as GGO biology predicts. As disease burden exceeds 50% lung involvement, whole-lung physics statistics shift substantially enough for near-perfect separation.
+**Finding 2 — Severity Gradient**  
+S1: 67% → S2: 75% → S3: 99.3% AUC — exactly as GGO biology predicts. As disease burden exceeds 50% lung involvement, whole-lung physics statistics shift enough for near-perfect separation.
 
-**Finding 3 — Physics Learns Genuine Pathology**
-At severe disease (CT-3), PAR-VAE achieves AUC=0.999±0.000 while CNN collapses to 0.660±0.073 with 49–67% false negative rate across seeds. Physics-constrained representations scale with severity; CNN spatial shortcuts do not.
+**Finding 3 — CNN Catastrophic Failure at Severe Disease**  
+At S3, PAR-VAE achieves 99.3 ± 1.0% AUC and misses only 1.6% of cases. The CNN baseline achieves 66.0 ± 7.5% AUC and misses 46.9 ± 19.7% of severe cases across seeds — a 26× variance inflation revealing systematic shortcut learning rather than genuine pathological generalisation.
 
-**Finding 4 — Patch Ablation Confirms Biological Mechanism**
-Finer spatial granularity (3×3 patches) increases class overlap rather than reducing it — biologically explained by GGO dilution over normal tissue even within individual patches in mild disease.
+**Finding 4 — Patch Ablation Confirms the Biological Mechanism**  
+Finer spatial granularity (3×3 patches) increases class overlap rather than reducing it. This is biologically explained by GGO dilution within normal tissue even at the patch level in mild disease — the ceiling is irreducible at any aggregation scale.
 
-**Finding 5 — Cross-Dataset Transfer**
-Frozen MosMed encoder with lightweight predictor adaptation outperforms domain-specific retraining on an independent DICOM cohort (AUC=0.745 vs 0.710, FN 33% vs 49.3%).
+**Finding 5 — Physics Makes Domain Shift Visible**  
+When evaluated on COVID-CT-MD (different scanner), PAR-VAE's physics alignment R² drops from 0.972 to 0.320 and ΔHU = 482 units — a quantifiable diagnostic signal. The CNN degrades silently with no internal warning.
 
 ---
 
 ## Results
 
-### Physics Alignment R² (3 seeds, mean ± std)
+### Physics Alignment R² (mean ± std, 3 seeds)
 
-| Category | Feature | CT-1 R² | CT-2 R² | CT-3 R² |
-|----------|---------|---------|---------|---------|
-| Tissue Density | Mean HU | 0.868±0.013 | 0.915±0.009 | 0.975±0.003 |
-| Tissue Density | HU Std Dev | 0.836±0.004 | 0.927±0.001 | 0.980±0.002 |
-| Tissue Density | HU p10 | 0.382±0.018 | 0.580±0.020 | 0.968±0.006 |
-| Tissue Density | HU p25 | 0.792±0.007 | 0.845±0.012 | 0.959±0.002 |
-| Tissue Density | HU p50 | 0.723±0.018 | 0.686±0.036 | 0.946±0.002 |
-| Tissue Density | HU p75 | 0.828±0.014 | 0.800±0.005 | 0.958±0.007 |
-| Tissue Density | HU p90 | 0.761±0.010 | 0.758±0.014 | 0.952±0.010 |
-| Lung Geometry | Mask Area | 0.906±0.003 | 0.931±0.007 | 0.984±0.002 |
-| Lung Geometry | Mask Fraction | 0.910±0.005 | 0.933±0.005 | 0.983±0.002 |
-| Boundary Sharpness | Gradient Mean | 0.805±0.028 | 0.805±0.016 | 0.990±0.001 |
-| Boundary Sharpness | Gradient Std | 0.885±0.005 | 0.904±0.004 | 0.973±0.003 |
-| Texture | GLCM Contrast | 0.824±0.008 | 0.809±0.007 | 0.975±0.005 |
-| Texture | Homogeneity | 0.862±0.020 | 0.882±0.002 | 0.982±0.001 |
-| Texture | Entropy | 0.891±0.020 | 0.921±0.006 | 0.984±0.003 |
-| | **Mean** | **0.81±0.07** | **0.84±0.07** | **0.972±0.000** |
+| Category | Feature | S1 R² | S2 R² | S3 R² |
+|----------|---------|--------|--------|--------|
+| Tissue Density | Mean HU | 0.864 | 0.910 | 0.976 |
+| Tissue Density | HU Std Dev | 0.832 | 0.927 | 0.981 |
+| Tissue Density | HU p10 | 0.364 | 0.569 | 0.963 |
+| Tissue Density | HU p25 | 0.794 | 0.846 | 0.956 |
+| Tissue Density | HU p50 | 0.704 | 0.671 | 0.943 |
+| Tissue Density | HU p75 | 0.814 | 0.803 | 0.962 |
+| Tissue Density | HU p90 | 0.770 | 0.773 | 0.962 |
+| Lung Geometry | Mask Area | 0.902 | 0.922 | 0.981 |
+| Lung Geometry | Fractional Occupancy | 0.909 | 0.927 | 0.984 |
+| Boundary Sharpness | Gradient Mean | 0.791 | 0.820 | 0.989 |
+| Boundary Sharpness | Gradient Std | 0.890 | 0.899 | 0.972 |
+| Texture | GLCM Contrast | 0.819 | 0.805 | 0.979 |
+| Texture | Homogeneity | 0.843 | 0.880 | 0.982 |
+| Texture | Entropy | 0.875 | 0.915 | 0.980 |
+| | **Mean** | **0.798** | **0.833** | **0.972** |
 
-### Classification Performance (3 seeds, mean ± std)
+### Classification Performance (mean ± std, 3 seeds)
 
-| Task | Model | Test AUC | Test F1 | FN Rate |
-|------|-------|---------|---------|---------|
-| CT-1 vs CT-0 (Mild) | PAR-VAE LogReg | 0.674±0.011 | 0.658±0.022 | — |
-| CT-1 vs CT-0 (Mild) | PAR-VAE Linear SVM | 0.672±0.007 | 0.664±0.013 | — |
-| CT-1 vs CT-0 (Mild) | CNN Baseline | 0.703±0.016 | 0.679±0.024 | — |
-| CT-2 vs CT-0 (Moderate) | PAR-VAE LogReg | 0.746±0.008 | 0.693±0.020 | — |
-| CT-2 vs CT-0 (Moderate) | PAR-VAE Linear SVM | 0.751±0.016 | 0.701±0.023 | — |
-| CT-3 vs CT-0 (Severe) | **PAR-VAE RBF SVM** | **0.999±0.000** | **0.983±0.000** | **1.1%** |
-| CT-3 vs CT-0 (Severe) | CNN Baseline | 0.660±0.073 | 0.572±0.107 | 49–67% |
+| Task | Model | Val Acc | Test Acc | Test F1 | Test AUC |
+|------|-------|---------|---------|---------|---------|
+| S1 vs S0 (Mild) | PAR-VAE (LogReg) | 62.0 ± 2.1 | 62.6 ± 2.8 | 65.8 ± 2.6 | 67.4 ± 1.4 |
+| S1 vs S0 (Mild) | CNN Baseline | 66.8 ± 1.5 | 65.2 ± 0.9 | 68.2 ± 2.5 | **69.8 ± 1.1** |
+| S2 vs S0 (Moderate) | PAR-VAE (LogReg) | 70.8 ± 1.2 | 66.5 ± 1.6 | 69.3 ± 2.0 | **74.6 ± 0.8** |
+| S2 vs S0 (Moderate) | CNN Baseline | 68.3 ± 2.4 | 64.1 ± 2.1 | 66.7 ± 1.9 | 70.0 ± 1.5 |
+| S3 vs S0 (Severe) | PAR-VAE (RBF-SVM) | 98.5 ± 1.1 | 97.3 ± 2.9 | 96.7 ± 3.8 | **99.3 ± 1.0** |
+| S3 vs S0 (Severe) | CNN Baseline | 57.1 ± 6.7 | 60.6 ± 6.3 | 57.2 ± 11.6 | 66.0 ± 7.5 |
 
-*CT-2 CNN baseline excluded due to unstable training dynamics across seeds.*
+CNN leads narrowly on S1 (69.8% vs 67.4%). PAR-VAE leads decisively on S2 and S3. At S3, CNN misses 46.9 ± 19.7% of severe cases vs PAR-VAE's 1.6% — a 26× variance inflation.
 
-### Cross-Dataset Transfer Learning (COVID-CT-MD)
-
-| Setup | AUC | FN Rate |
-|-------|-----|---------|
-| MosMed CT-3 in-domain | 0.999 | 1.1% |
-| Retrained from scratch on COVID-CT-MD | 0.710 | 49.3% |
-| Frozen MosMed encoder (zero-shot) | 0.731 | 26.5% |
-| **Frozen encoder + fine-tuned predictor** | **0.745** | **33.0%** |
-
-
-### Class Overlap Analysis (3 seeds)
+### Class Overlap and Separability (mean ± std, 3 seeds)
 
 | Task | Feature Type | Mean Overlap | Cohen's d |
 |------|-------------|-------------|-----------|
-| CT-1 vs CT-0 | Physics (14-dim) | 0.845±0.080 | 0.38±0.21 |
-| CT-1 vs CT-0 | Learned (top 15) | 0.845±0.070 | 0.41±0.19 |
-| CT-2 vs CT-0 | Physics (14-dim) | 0.841±0.060 | 0.42±0.15 |
-| CT-2 vs CT-0 | Learned (top 15) | 0.841±0.090 | 0.44±0.18 |
+| S1 vs S0 | Physics (14) | 0.845 ± 0.080 | 0.38 ± 0.21 |
+| S1 vs S0 | Learned (top 15) | 0.845 ± 0.070 | 0.41 ± 0.19 |
+| S2 vs S0 | Physics (14) | 0.841 ± 0.060 | 0.42 ± 0.15 |
+| S2 vs S0 | Learned (top 15) | 0.841 ± 0.090 | 0.44 ± 0.18 |
+| S3 vs S0 | Physics (14) | 0.776 ± 0.050 | 0.42 ± 0.15 |
+| S3 vs S0 | Learned (top 15) | 0.783 ± 0.014 | 0.37 ± 0.17 |
+
+Near-identical physics and learned overlap values confirm the ceiling is data-intrinsic, not feature-design-dependent.
+
+### Cross-Scanner Transfer (COVID-CT-MD)
+
+| Setup | R² | AUC | FN Rate |
+|-------|-----|-----|---------|
+| MosMedData S3 in-domain | 0.972 | 0.999 | 1.1% |
+| Retrained from scratch on COVID-CT-MD | 0.322 | 0.710 | 49.3% |
+| **Frozen encoder + fine-tuned predictor** | **0.417** | **0.745** | **33.0%** |
+
+R² drop from 0.972 → 0.320 quantifies the scanner calibration gap (ΔHU = 482 units). CNN achieves AUC = 0.71 with no equivalent internal signal of degradation.
 
 ---
 
 ## Architecture
 
 ```
-Input CT Slice (512×512, normalised [-1,1])
+Input CT Slice (512×512)
         ↓
    Encoder — 5-layer CNN (LeakyReLU + BatchNorm)
         ↓
   85-dimensional Latent Space
+   ├── 14 dims regularised toward physics attributes
+   └── 71 dims free for residual spatial information
         ↓
-┌─────────────────────────┐
-│  Attribute Predictor    │ → 14 physics attributes
-│  (3-layer ResNet MLP)   │   R² = 0.972±0.000
-└─────────────────────────┘
+┌─────────────────────────────┐
+│   Physics Attribute         │ → 14 clinical attributes (R² = 0.972)
+│   Predictor (3-layer MLP)   │
+└─────────────────────────────┘
         ↓
    Decoder — 5-layer CNN (Tanh output)
 ```
 
-**Training objective:**
+**Training Objective:**
 ```
 L = L_recon + β·L_KL + λ·L_attr
 ```
@@ -126,54 +127,11 @@ L = L_recon + β·L_KL + λ·L_attr
 
 | Phase | Epochs | β | λ | Purpose |
 |-------|--------|---|---|---------|
-| Physics-First | 0–20 | 10⁻⁴→2·10⁻⁴ | 1.5 | Prevent posterior collapse |
-| Gradual Balance | 20–40 | 2·10⁻⁴→5·10⁻⁴ | 1.5→3.0 | Strengthen physics supervision |
+| Physics-First | 0–20 | 10⁻⁴ → 2·10⁻⁴ | 1.5 | Prevent posterior collapse |
+| Gradual Balance | 20–40 | 2·10⁻⁴ → 5·10⁻⁴ | 1.5 → 3.0 | Tighten physics supervision |
 | Fine-Tune | 40–50 | 5·10⁻⁴ | 3.0 | Maximise physics alignment |
 
-Healthy KL ≈ 17 confirmed across all seeds and cohorts (collapse threshold KL < 5).
-
----
-
-## Methodology
-
-### Datasets
-- **MosMedData (Primary):** 1,110 patients, 5-level CT severity stratification, Center for Diagnostics and Telemedicine, Moscow
-- **COVID-CT-MD (Transfer):** 169 COVID-19 + 76 Normal patients, multi-institutional DICOM cohort
-
-### Cohorts
-- **Cohort A (CT-1 vs CT-0):** Mild COVID vs Normal — GGOs covering <25% lung
-- **Cohort B (CT-2 vs CT-0):** Moderate COVID vs Normal — 25–50% involvement
-- **Cohort C (CT-3 vs CT-0):** Severe COVID vs Normal — 50–75% involvement
-
-### 14 Physics Features
-
-Grounded in X-ray attenuation physics:
-```
-HU = 1000 × (μ_tissue − μ_water) / (μ_water − μ_air)
-```
-
-| Category | Features |
-|----------|---------|
-| Densitometric (7) | Mean HU, Std HU, p10, p25, p50, p75, p90 |
-| Morphological (2) | Lung mask area, fractional occupancy |
-| Gradient (2) | Sobel mean, Sobel std |
-| Texture (3) | GLCM contrast, homogeneity, entropy |
-
-### 9-Stage Validation Protocol
-
-| Check | Result |
-|-------|--------|
-| File integrity | 0 missing files |
-| HU range | Mean −614.9 ± 79.1 HU, zero outliers |
-| Mask integrity | 0 empty masks |
-| Slice sampling | Mean 21.1/patient (CT-1), 29.3 (CT-2) |
-| Physics validation | ΔHU ≈ 30 (CT-1), ΔHU ≈ 50 (CT-2) |
-| Outlier detection | <4% across all features |
-| Image quality | 5.0% flagged at 5th percentile |
-| Split balance | Chi-square p=0.521 |
-| Severity gradient | Mann-Whitney p<0.0001 all features |
-
-Volume-level splitting prevents patient-level leakage — all slices from one patient confined to one split.
+Healthy KL ≈ 15–17 confirmed across all seeds and cohorts. Collapse threshold: KL < 5.
 
 ---
 
@@ -181,94 +139,64 @@ Volume-level splitting prevents patient-level leakage — all slices from one pa
 
 ### Annealing Schedule
 
-| Strategy | KL | Outcome |
-|----------|----|---------|
-| No annealing | <5 (collapse) | Degenerate latent space |
-| High β early | Severe collapse | No image encoding |
-| High λ early | ≈15 | Attribute lock-in |
-| **3-phase (ours)** | **≈17** | **Stable physics alignment** |
+| Strategy | KL at Epoch 50 | Outcome |
+|----------|---------------|---------|
+| No annealing | < 5 (collapse) | Degenerate latent space |
+| High β early | < 5 (collapse) | No image structure encoded |
+| High λ early | ≈ 15 | Attribute lock-in, poor reconstruction |
+| **3-phase (ours)** | **≈ 15** | **Stable, generalisable alignment** |
 
 ### Latent Dimensionality
 
 | Dimensions | Val R² | Test R² | Gap | Assessment |
 |------------|--------|---------|-----|------------|
-| 64 | 0.842 | 0.808 | 0.034 | Undercapacity |
+| 64 | — | — | — | Undercapacity |
 | **85** | **0.969** | **0.972** | **0.003** | **Optimal** |
-| 96 | 0.845 | 0.789 | 0.056 | Overfitting |
+| 96 | — | — | 0.056 | Overfitting |
 
 ---
 
-## Repository Structure
+## Methodology
 
-```
-data/
-  external_evaluation/
-    dataset/
-      full_balanced.csv
-      train.csv
-      val.csv
-      test.csv
-      verification_grid_covid.png
-      verification_grid_normal.png
+### Datasets
+- **MosMedData (Primary):** 1,110 patients, 5-level CT severity stratification, Centre for Diagnostics and Telemedicine, Moscow
+- **COVID-CT-MD (Transfer):** Independent multi-institutional DICOM cohort for cross-scanner evaluation
 
-code/
-  external_evaluation/
-    scripts/
-      Extraction_dataset_Covid_MD/
-        1_patient_extraction.py
-        create_CSV.py
-        patient_check.py
-        Preprocessing_local.py
-        test_structure.py
+### Cohort Construction
 
-models/
-  external_evaluation/
-    dim_85/
-      model_results.txt
-  transfer_learned_pth_files/
-    Transfer_learned_pth_files/
-      seed/
-        CT3/
-          seed_999_CT3/
-            best_arsivae_improved (13).pth
+| Label | Severity | GGO Involvement | Slices |
+|-------|---------|----------------|--------|
+| S0 | Normal (CT-0) | 0% | — |
+| S1 | Mild (CT-1) | < 25% | 5,500 balanced |
+| S2 | Moderate (CT-2) | 25–50% | 1,700 balanced |
+| S3 | Severe (CT-3) | 50–75% | 1,760 balanced |
 
-notebooks/
-  data_generator/
-    data-generator (1).ipynb
-    ReadMe.md
-    sanity-integrity-validation-checks-final (4).ipynb
-  external_evaluation/
-    COVID_MD_retrain.ipynb
+Volume-level 70/15/15 train/val/test split — all slices from one patient confined to one split. Chi-square split balance confirmed (p = 0.521).
 
-results/
-  cnn_resnet/
-  multi_seeded/
-  external_evaluation/
-  paper_tables/
+### 14 Physics Features
 
-docs/
-  MIUA/
-  Physics_based_papers.txt
+Grounded in X-ray attenuation physics (HU scale):
 
-papers/
-  MIUA_2026_Supp.pdf
-  Springer_Lecture_Notes_in_Computer_Science (5) (1).pdf
+| Category | Features |
+|----------|---------|
+| Tissue Density (7) | Mean HU, Std HU, p10, p25, p50, p75, p90 |
+| Lung Geometry (2) | Mask area, fractional occupancy |
+| Boundary Sharpness (2) | Sobel gradient mean, Sobel gradient std |
+| Texture (3) | GLCM contrast, homogeneity, entropy |
 
-LICENSE
-ReadMe.md
-requirements.txt
-.gitignore
-```
+### 9-Stage Data Integrity Protocol
 
-### How to navigate
-
-- `data/` contains external evaluation datasets and verification artifacts.
-- `code/` contains preprocessing and dataset extraction scripts.
-- `notebooks/` contains development and analysis notebooks.
-- `models/` contains saved model outputs and weights.
-- `results/` contains experimental outputs, plots, and seed-based result directories.
-- `docs/` contains reference material and supplementary documentation.
-- `papers/` contains final paper PDFs and related supporting files.
+| Check | Result |
+|-------|--------|
+| File integrity | 0 missing files |
+| HU range verification | Mean −614.9 ± 79.1 HU, zero outliers |
+| Mask integrity | 0 non-diagnostic slices |
+| Slice sampling consistency | 21.1/patient (S1), 29.3/patient (S2) |
+| Physics feature validation | ΔHU ≈ 30 (S1 vs S0) |
+| Outlier detection (IQR) | < 4% across all 14 features |
+| Image quality audit | 5.0% flagged at 5th percentile |
+| Split balance | Chi-square p = 0.521 |
+| Severity gradient | Mann-Whitney p < 0.0001 all features |
 
 ---
 
@@ -278,25 +206,57 @@ requirements.txt
 pip install -r requirements.txt
 ```
 
+Key dependencies:
 ```
-# python==3.11.13
-numpy==1.26.4
-pandas==2.2.3
-matplotlib==3.7.2
-seaborn==0.12.2
-scipy==1.15.3
-scikit-image==0.25.2
-scikit-learn==1.2.2
+python==3.11
 torch==2.6.0+cu124
-Pillow==11.3.0
-opencv-python==4.12.0
+numpy==1.26.4
+scikit-learn==1.2.2
 nibabel==5.3.2
-kagglehub==0.3.13
 pydicom==2.4.4
-pylibjpeg==2.0.1
-pylibjpeg-libjpeg==2.1.0
-gdcm==3.0.24
-tqdm==4.67.1
 SimpleITK==2.4.1
+opencv-python==4.12.0
 ```
 
+---
+
+## Repository Structure
+
+```
+notebooks/
+  data_generator/        # Preprocessing and integrity validation
+  external_evaluation/   # COVID-CT-MD transfer experiment
+
+code/
+  external_evaluation/   # Dataset extraction and preprocessing scripts
+
+models/
+  external_evaluation/   # Saved model weights and results
+  transfer_learned/      # Transfer learning checkpoints
+
+results/
+  cnn_resnet/            # CNN baseline results
+  multi_seeded/          # 3-seed PAR-VAE results per cohort
+  external_evaluation/   # Cross-scanner transfer results
+  paper_tables/          # Final tables and figures
+
+data/
+  external_evaluation/   # COVID-CT-MD splits and verification artifacts
+
+docs/                    # Reference literature
+
+requirements.txt
+LICENSE
+```
+
+---
+
+## Citation
+
+If you use this code or findings, please cite the associated paper (details to follow upon publication).
+
+---
+
+## Acknowledgements
+
+MosMedData provided by the Centre for Diagnostics and Telemedicine, Moscow. COVID-CT-MD provided under open access for research use.
