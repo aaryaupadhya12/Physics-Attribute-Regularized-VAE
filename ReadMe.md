@@ -22,7 +22,7 @@ Why do interpretable AI systems plateau in performance while black-box CNNs achi
 ---
 
 
-![Model Architecture](Physics-Attribute-Regularized-VAE\Image\Architecture_PARVAE.png)
+![Model Architecture](Image/Architecture_PARVAE.png)
 
 ## Key Findings
 
