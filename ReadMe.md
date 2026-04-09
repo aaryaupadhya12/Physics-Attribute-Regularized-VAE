@@ -101,9 +101,7 @@ R² drop from 0.972 → 0.320 quantifies the scanner calibration gap (ΔHU = 482
 
 ## Architecture
 
-```
 ![PAR-VAE Architecture](Image/Architecture_PARVAE.png)
-```
 
 **Training Objective:**
 ```
