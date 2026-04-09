@@ -234,13 +234,6 @@ requirements.txt
 LICENSE
 ```
 
----
-
-## Citation
-
-If you use this code or findings, please cite the associated paper (details to follow upon publication).
-
----
 
 ## Acknowledgements
 
