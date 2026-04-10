@@ -1,14 +1,32 @@
 # Physics Attribute-Regularized VAE (PAR-VAE)
+
 ## A Physics-Constrained Generative Audit of CT Severity Classification
+
+> **Status:** Publication-Ready Research Code | **License:** MIT | **Last Updated:** April 2026
 
 ![Model](https://img.shields.io/badge/Model-PAR--VAE-blue)
 ![Dataset](https://img.shields.io/badge/Dataset-MosMedData%20%2B%20COVID--CT--MD-orange)
-![S3 AUC](https://img.shields.io/badge/S3%20AUC-99.3±1.0%25-brightgreen)
-![S2 AUC](https://img.shields.io/badge/S2%20AUC-74.6±0.8%25-green)
-![S1 AUC](https://img.shields.io/badge/S1%20AUC-67.4±1.4%25-yellowgreen)
-![Physics R2](https://img.shields.io/badge/Physics%20R²-0.972-purple)
+![S3_AUC](https://img.shields.io/badge/S3%20AUC-99.3±1.0%25-brightgreen)
+![S2_AUC](https://img.shields.io/badge/S2%20AUC-74.6±0.8%25-green)
+![S1_AUC](https://img.shields.io/badge/S1%20AUC-67.4±1.4%25-yellowgreen)
+![Physics_R2](https://img.shields.io/badge/Physics%20R²-0.972-purple)
 ![Features](https://img.shields.io/badge/Physics%20Features-14-blue)
-![Seeds](https://img.shields.io/badge/Reproducibility-3%20Seeds-lightgrey)
+![Reproducibility](https://img.shields.io/badge/Reproducibility-3%20Seeds-lightgrey)
+
+---
+
+## Table of Contents
+
+1. [Core Question](#core-question)
+2. [Key Findings](#key-findings)
+3. [Results Summary](#results-summary)
+4. [Repository Structure](#repository-structure)
+5. [Installation & Setup](#installation--setup)
+6. [Quick Start](#quick-start)
+7. [Reproducing Results](#reproducing-results)
+8. [Project Architecture](#project-architecture)
+9. [Methodology](#methodology)
+10. [Citation](#citation)
 
 ---
 
@@ -99,7 +117,142 @@ R² drop from 0.972 → 0.320 quantifies the scanner calibration gap (ΔHU = 482
 
 ---
 
-## Architecture
+## Installation & Setup
+
+### Prerequisites
+- **Python:** 3.11+
+- **CUDA:** 12.4+ (for GPU support)
+- **System:** Linux/macOS/Windows with 16GB+ RAM, GPU with 8GB+ VRAM recommended
+
+### Installation Steps
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/yourusername/PAR-VAE.git
+   cd PAR-VAE
+   ```
+
+2. **Create virtual environment:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Verify installation:**
+   ```bash
+   python -c "import torch; print(f'PyTorch version: {torch.__version__}')"
+   python -c "from src.models import VAE; print('PAR-VAE imported successfully')"
+   ```
+
+For detailed setup instructions, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
+
+---
+
+## Quick Start
+
+### 1. Download Data
+
+Download MosMedData (primary) and COVID-CT-MD (transfer) datasets:
+```bash
+# Create data directory structure
+mkdir -p data/{mosmeddata,covid_ct_md}
+
+# Place dataset files in appropriate directories
+# Expected structure:
+# data/
+#   └── mosmeddata/
+#       ├── train.csv
+#       ├── val.csv
+#       └── test.csv
+```
+
+### 2. Run Integrity Checks
+
+```bash
+python scripts/data_integrity_checks.py \
+  --data-dir data/mosmeddata \
+  --output-dir experiments/data_validation
+```
+
+### 3. Extract Physics Features
+
+```bash
+python scripts/extract_features.py \
+  --config configs/parvae_default.yaml \
+  --output-dir experiments/feature_extraction
+```
+
+### 4. Train PAR-VAE Model
+
+```bash
+# Train on S3 (severe) task
+python scripts/train_parvae.py \
+  --config configs/parvae_s3.yaml \
+  --seed 42 \
+  --output-dir experiments/mosmeddata/s3_analysis
+```
+
+### 5. Evaluate Model
+
+```bash
+python scripts/evaluate_model.py \
+  --model-path pretrained_models/parvae_s3_seed_42.pth \
+  --config configs/parvae_s3.yaml \
+  --output-dir experiments/mosmeddata/s3_analysis/eval
+```
+
+### 6. Cross-Scanner Transfer Evaluation
+
+```bash
+python scripts/covid_ct_md_evaluation.py \
+  --model-path pretrained_models/parvae_s3_seed_42.pth \
+  --data-dir data/covid_ct_md \
+  --output-dir experiments/covid_ct_md/transfer_results
+```
+
+For detailed walkthrough, see [docs/QUICKSTART.md](docs/QUICKSTART.md).
+
+---
+
+## Reproducing Results
+
+### Reproduce Main Results (Table 2)
+
+All 3 seeds for S1, S2, S3 tasks:
+```bash
+bash scripts/reproduce_all_results.sh
+```
+
+This will:
+- Train PAR-VAE with seeds 16, 42, 999
+- Extract physics features and alignment metrics
+- Train classifiers (LogReg/SVM)
+- Generate result tables and figures
+
+**Expected runtime:** ~48 hours on single GPU
+
+**Reproducibility details:** See [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)
+
+### Reproduce Ablation Studies
+
+**Annealing schedule ablation:**
+```bash
+python scripts/train_parvae.py --config configs/ablations/annealing_*.yaml
+```
+
+**Latent dimensionality ablation:**
+```bash
+python scripts/train_parvae.py --config configs/ablations/latent_dim_*.yaml
+```
+
+---
+
+## Project Architecture
 
 ![PAR-VAE Architecture](Image/Architecture_PARVAE.png)
 
@@ -207,33 +360,139 @@ opencv-python==4.12.0
 
 ## Repository Structure
 
+Research-grade organization following scientific standards and best practices:
+
 ```
-notebooks/
-  data_generator/        # Preprocessing and integrity validation
-  external_evaluation/   # COVID-CT-MD transfer experiment
-
-code/
-  external_evaluation/   # Dataset extraction and preprocessing scripts
-
-models/
-  external_evaluation/   # Saved model weights and results
-  transfer_learned/      # Transfer learning checkpoints
-
-results/
-  cnn_resnet/            # CNN baseline results
-  multi_seeded/          # 3-seed PAR-VAE results per cohort
-  external_evaluation/   # Cross-scanner transfer results
-  paper_tables/          # Final tables and figures
-
-data/
-  external_evaluation/   # COVID-CT-MD splits and verification artifacts
-
-docs/                    # Reference literature
-
-requirements.txt
-LICENSE
+PAR-VAE/
+├── README.md                          # Main documentation
+├── LICENSE                            # MIT License
+├── requirements.txt                   # Python dependencies
+├── setup.py                          # Package installation
+│
+├── src/                              # Core source code (research-grade module)
+│   ├── __init__.py
+│   ├── models/                       # Model architectures
+│   │   ├── __init__.py
+│   │   ├── vae.py                   # VAE architecture
+│   │   ├── regularizers.py          # Physics-based regularizers
+│   │   └── losses.py                # Custom loss functions
+│   │
+│   ├── data/                         # Data loading and preprocessing
+│   │   ├── __init__.py
+│   │   ├── dataset.py               # PyTorch Dataset classes
+│   │   ├── loaders.py               # DataLoader utilities
+│   │   └── preprocessing.py         # HU normalization, augmentation
+│   │
+│   ├── utils/                        # Utility functions
+│   │   ├── __init__.py
+│   │   ├── physics.py               # 14 physics feature extraction
+│   │   ├── metrics.py               # Evaluation metrics
+│   │   ├── visualization.py         # Plotting and visualization
+│   │   └── config.py                # Configuration class
+│   │
+│   └── evaluation/                   # Evaluation pipelines
+│       ├── __init__.py
+│       ├── classifier.py            # LogReg/SVM classifiers
+│       ├── cross_validation.py      # Multi-seed validation
+│       └── transfer.py              # Cross-scanner transfer evaluation
+│
+├── scripts/                          # Standalone executables
+│   ├── train_parvae.py              # Main training script
+│   ├── evaluate_model.py            # Evaluation script
+│   ├── extract_features.py          # Physics feature extraction
+│   ├── covid_ct_md_evaluation.py    # Transfer learning evaluation
+│   └── data_integrity_checks.py     # Data validation
+│
+├── notebooks/                        # Jupyter notebooks for exploration
+│   ├── 01_data_exploration.ipynb    # EDA and visualization
+│   ├── 02_model_training.ipynb      # Training pipeline
+│   ├── 03_physics_validation.ipynb  # Physics feature validation
+│   ├── 04_ablation_studies.ipynb    # Annealing & latent dim ablations
+│   └── 05_transfer_evaluation.ipynb # COVID-CT-MD transfer results
+│
+├── configs/                          # Configuration files
+│   ├── parvae_default.yaml          # Default training config
+│   ├── parvae_s1.yaml               # S1 (mild) task config
+│   ├── parvae_s2.yaml               # S2 (moderate) task config
+│   ├── parvae_s3.yaml               # S3 (severe) task config
+│   └── transfer_learning.yaml       # Transfer learning config
+│
+├── experiments/                      # Results and experiment tracking
+│   ├── mosmeddata/                  # MosMedData in-domain results
+│   │   ├── s1_analysis/
+│   │   ├── s2_analysis/
+│   │   └── s3_analysis/
+│   ├── covid_ct_md/                 # COVID-CT-MD transfer results
+│   └── ablation_studies/            # Annealing schedule & latent dim
+│
+├── data/                             # Data and splits (not in repo)
+│   ├── mosmeddata/
+│   │   ├── train.csv
+│   │   ├── val.csv
+│   │   └── test.csv
+│   └── covid_ct_md/                 # External evaluation data
+│       ├── train.csv
+│       ├── val.csv
+│       └── test.csv
+│
+├── pretrained_models/                # Model checkpoints
+│   ├── parvae_s1_seed_*.pth
+│   ├── parvae_s2_seed_*.pth
+│   ├── parvae_s3_seed_*.pth
+│   └── transfer_learned/
+│
+├── docs/                             # Documentation
+│   ├── INSTALLATION.md               # Detailed setup
+│   ├── QUICKSTART.md                 # Getting started guide
+│   ├── API.md                        # API documentation
+│   ├── REPRODUCIBILITY.md            # Reproduction steps
+│   ├── DATASET.md                    # Dataset information
+│   │
+│   ├── figures/                      # Publication figures
+│   │   ├── architecture.png
+│   │   ├── physics_features.png
+│   │   └── results_comparison.png
+│   │
+│   └── papers/                       # Reference papers
+│       └── references.bib
+│
+├── assets/                           # Images for README
+│   └── Architecture_PARVAE.png
+│
+└── .gitignore                        # Git ignore patterns
 ```
 
+### Directory Descriptions
+
+| Directory | Purpose | Contents |
+|-----------|---------|----------|
+| `src/` | Research Python module | Core algorithms, data handling, utilities |
+| `scripts/` | Executable entry points | Training, evaluation, data processing |
+| `notebooks/` | Interactive exploration | Jupyter notebooks for analysis & visualization |
+| `configs/` | Training configurations | YAML files for reproducible experiments |
+| `experiments/` | Results & tracking | Model outputs, metrics, logs per experiment |
+| `data/` | Dataset splits | CSV reference files (data not in repo) |
+| `pretrained_models/` | Model checkpoints | Trained weights for reproduction & transfer |
+| `docs/` | Documentation & figures | Guides, API docs, publication-ready figures |
+| `assets/` | README images | Supporting media for documentation |
+
+---
+
+## Citation
+
+If you use PAR-VAE in your research, please cite:
+
+```bibtex
+@article{parvae2026,
+  title={Physics Attribute-Regularized VAE: Explaining the Biological Ceiling in COVID-19 CT Severity Classification},
+  author={Your Name and Collaborators},
+  journal={Publication Journal},
+  year={2026},
+  doi={10.xxxx/xxxxx}
+}
+```
+
+---
 
 ## Acknowledgements
 
