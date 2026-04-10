@@ -13,22 +13,6 @@
 ![Features](https://img.shields.io/badge/Physics%20Features-14-blue)
 ![Reproducibility](https://img.shields.io/badge/Reproducibility-3%20Seeds-lightgrey)
 
----
-
-## Table of Contents
-
-1. [Core Question](#core-question)
-2. [Key Findings](#key-findings)
-3. [Results Summary](#results-summary)
-4. [Repository Structure](#repository-structure)
-5. [Installation & Setup](#installation--setup)
-6. [Quick Start](#quick-start)
-7. [Reproducing Results](#reproducing-results)
-8. [Project Architecture](#project-architecture)
-9. [Methodology](#methodology)
-10. [Citation](#citation)
-
----
 
 ## Core Question
 
@@ -149,8 +133,6 @@ R² drop from 0.972 → 0.320 quantifies the scanner calibration gap (ΔHU = 482
    python -c "from src.models import VAE; print('PAR-VAE imported successfully')"
    ```
 
-For detailed setup instructions, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
-
 ---
 
 ## Quick Start
@@ -171,94 +153,7 @@ mkdir -p data/{mosmeddata,covid_ct_md}
 #       └── test.csv
 ```
 
-### 2. Run Integrity Checks
 
-```bash
-python scripts/data_integrity_checks.py \
-  --data-dir data/mosmeddata \
-  --output-dir experiments/data_validation
-```
-
-### 3. Extract Physics Features
-
-```bash
-python scripts/extract_features.py \
-  --config configs/parvae_default.yaml \
-  --output-dir experiments/feature_extraction
-```
-
-### 4. Train PAR-VAE Model
-
-```bash
-# Train on S3 (severe) task
-python scripts/train_parvae.py \
-  --config configs/parvae_s3.yaml \
-  --seed 42 \
-  --output-dir experiments/mosmeddata/s3_analysis
-```
-
-### 5. Evaluate Model
-
-```bash
-python scripts/evaluate_model.py \
-  --model-path pretrained_models/parvae_s3_seed_42.pth \
-  --config configs/parvae_s3.yaml \
-  --output-dir experiments/mosmeddata/s3_analysis/eval
-```
-
-### 6. Cross-Scanner Transfer Evaluation
-
-```bash
-python scripts/covid_ct_md_evaluation.py \
-  --model-path pretrained_models/parvae_s3_seed_42.pth \
-  --data-dir data/covid_ct_md \
-  --output-dir experiments/covid_ct_md/transfer_results
-```
-
-For detailed walkthrough, see [docs/QUICKSTART.md](docs/QUICKSTART.md).
-
----
-
-## Reproducing Results
-
-### Reproduce Main Results (Table 2)
-
-All 3 seeds for S1, S2, S3 tasks:
-```bash
-bash scripts/reproduce_all_results.sh
-```
-
-This will:
-- Train PAR-VAE with seeds 16, 42, 999
-- Extract physics features and alignment metrics
-- Train classifiers (LogReg/SVM)
-- Generate result tables and figures
-
-**Expected runtime:** ~48 hours on single GPU
-
-**Reproducibility details:** See [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)
-
-### Reproduce Ablation Studies
-
-**Annealing schedule ablation:**
-```bash
-python scripts/train_parvae.py --config configs/ablations/annealing_*.yaml
-```
-
-**Latent dimensionality ablation:**
-```bash
-python scripts/train_parvae.py --config configs/ablations/latent_dim_*.yaml
-```
-
----
-
-## Project Architecture
-
-![PAR-VAE Architecture](Image/Architecture_PARVAE.png)
-
-**Training Objective:**
-```
-L = L_recon + β·L_KL + λ·L_attr
 ```
 
 **3-Phase Annealing Schedule:**
@@ -478,21 +373,6 @@ PAR-VAE/
 
 ---
 
-## Citation
-
-If you use PAR-VAE in your research, please cite:
-
-```bibtex
-@article{parvae2026,
-  title={Physics Attribute-Regularized VAE: Explaining the Biological Ceiling in COVID-19 CT Severity Classification},
-  author={Your Name and Collaborators},
-  journal={Publication Journal},
-  year={2026},
-  doi={10.xxxx/xxxxx}
-}
-```
-
----
 
 ## Acknowledgements
 
