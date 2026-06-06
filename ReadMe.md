@@ -2,8 +2,6 @@
 
 ## A Physics-Constrained Generative Audit of CT Severity Classification
 
-> **Status:** Publication-Ready Research Code | **License:** MIT | **Last Updated:** April 2026
-
 ![Model](https://img.shields.io/badge/Model-PAR--VAE-blue)
 ![Dataset](https://img.shields.io/badge/Dataset-MosMedData%20%2B%20COVID--CT--MD-orange)
 ![S3_AUC](https://img.shields.io/badge/S3%20AUC-99.3±1.0%25-brightgreen)
@@ -13,6 +11,7 @@
 ![Features](https://img.shields.io/badge/Physics%20Features-14-blue)
 ![Reproducibility](https://img.shields.io/badge/Reproducibility-3%20Seeds-lightgrey)
 
+---
 
 ## Core Question
 
@@ -24,20 +23,91 @@ When a physics-grounded model underperforms a black-box CNN on COVID-19 CT class
 
 ## Key Findings
 
-**Finding 1 — Biological Ceiling at Mild Disease**  
+**Finding 1 — Biological Ceiling at Mild Disease**
 Global physics features face an irreducible 84% class overlap at mild COVID-19 (S1). Both PAR-VAE and CNN baselines converge at ~67–70% AUC on S1, confirming the limit is data-intrinsic, not model-intrinsic.
 
-**Finding 2 — Severity Gradient**  
+**Finding 2 — Severity Gradient**
 S1: 67% → S2: 75% → S3: 99.3% AUC — exactly as GGO biology predicts. As disease burden exceeds 50% lung involvement, whole-lung physics statistics shift enough for near-perfect separation.
 
-**Finding 3 — CNN Catastrophic Failure at Severe Disease**  
+**Finding 3 — CNN Catastrophic Failure at Severe Disease**
 At S3, PAR-VAE achieves 99.3 ± 1.0% AUC and misses only 1.6% of cases. The CNN baseline achieves 66.0 ± 7.5% AUC and misses 46.9 ± 19.7% of severe cases across seeds — a 26× variance inflation revealing systematic shortcut learning rather than genuine pathological generalisation.
 
-**Finding 4 — Patch Ablation Confirms the Biological Mechanism**  
+**Finding 4 — Patch Ablation Confirms the Biological Mechanism**
 Finer spatial granularity (3×3 patches) increases class overlap rather than reducing it. This is biologically explained by GGO dilution within normal tissue even at the patch level in mild disease — the ceiling is irreducible at any aggregation scale.
 
-**Finding 5 — Physics Makes Domain Shift Visible**  
+**Finding 5 — Physics Makes Domain Shift Visible**
 When evaluated on COVID-CT-MD (different scanner), PAR-VAE's physics alignment R² drops from 0.972 to 0.320 and ΔHU = 482 units — a quantifiable diagnostic signal. The CNN degrades silently with no internal warning.
+
+---
+
+## Methodology
+
+### Datasets
+
+- **MosMedData (Primary):** 1,110 patients, 5-level CT severity stratification, Centre for Diagnostics and Telemedicine, Moscow.
+- **COVID-CT-MD (Transfer):** Independent multi-institutional DICOM cohort for cross-scanner evaluation.
+
+### Cohort Construction
+
+| Label | Severity | GGO Involvement | Slices |
+|-------|----------|-----------------|--------|
+| S0 | Normal (CT-0) | 0% | — |
+| S1 | Mild (CT-1) | < 25% | 5,500 balanced |
+| S2 | Moderate (CT-2) | 25–50% | 1,700 balanced |
+| S3 | Severe (CT-3) | 50–75% | 1,760 balanced |
+
+Volume-level 70/15/15 train/val/test split — all slices from one patient confined to one split. Chi-square split balance confirmed (p = 0.521).
+
+### 14 Physics Features
+
+Grounded in X-ray attenuation physics (HU scale):
+
+| Category | Features |
+|----------|----------|
+| Tissue Density (7) | Mean HU, Std HU, p10, p25, p50, p75, p90 |
+| Lung Geometry (2) | Mask area, fractional occupancy |
+| Boundary Sharpness (2) | Sobel gradient mean, Sobel gradient std |
+| Texture (3) | GLCM contrast, homogeneity, entropy |
+
+### Architecture
+
+PAR-VAE has three components:
+
+- **Encoder:** 5-layer CNN mapping 512×512 CT slices to an 85-dimensional latent space (Leaky-ReLU, Batch Normalization).
+- **Decoder:** Mirrored 5-layer CNN (Tanh output).
+- **Physics Attribute Predictor:** 3-layer MLP predicting the 14 radiological attributes from latent means μz.
+
+The 85-dimensional space is implicitly partitioned: 14 dimensions are regularized toward clinical attributes, 71 remain free for residual information not explained by global physics.
+
+### Training Objective
+
+The loss balances reconstruction, latent regularization, and physics alignment:
+
+$$\mathcal{L} = \mathcal{L}_\text{recon} + \beta \cdot \mathcal{L}_\text{KL} + \lambda \cdot \mathcal{L}_\text{attr}$$
+
+### 3-Phase Annealing Schedule
+
+| Phase | Epochs | β | λ | Purpose |
+|-------|--------|---|---|---------|
+| Physics-First | 0–20 | 10⁻⁴ → 2·10⁻⁴ | 1.5 | Prevent posterior collapse |
+| Gradual Balance | 20–40 | 2·10⁻⁴ → 5·10⁻⁴ | 1.5 → 3.0 | Tighten physics supervision |
+| Fine-Tune | 40–50 | 5·10⁻⁴ | 3.0 | Maximise physics alignment |
+
+Healthy KL ≈ 15–17 confirmed across all seeds and cohorts. Collapse threshold: KL < 5.
+
+### 9-Stage Data Integrity Protocol
+
+| Check | Result |
+|-------|--------|
+| File integrity | 0 missing files |
+| HU range verification | Mean −614.9 ± 79.1 HU, zero outliers |
+| Mask integrity | 0 non-diagnostic slices |
+| Slice sampling consistency | 21.1/patient (S1), 29.3/patient (S2) |
+| Physics feature validation | ΔHU ≈ 30 (S1 vs S0) |
+| Outlier detection (IQR) | < 4% across all 14 features |
+| Image quality audit | 5.0% flagged at 5th percentile |
+| Split balance | Chi-square p = 0.521 |
+| Severity gradient | Mann-Whitney p < 0.0001 all features |
 
 ---
 
@@ -66,7 +136,7 @@ When evaluated on COVID-CT-MD (different scanner), PAR-VAE's physics alignment R
 ### Classification Performance (mean ± std, 3 seeds)
 
 | Task | Model | Val Acc | Test Acc | Test F1 | Test AUC |
-|------|-------|---------|---------|---------|---------|
+|------|-------|---------|----------|---------|----------|
 | S1 vs S0 (Mild) | PAR-VAE (LogReg) | 62.0 ± 2.1 | 62.6 ± 2.8 | 65.8 ± 2.6 | 67.4 ± 1.4 |
 | S1 vs S0 (Mild) | CNN Baseline | 66.8 ± 1.5 | 65.2 ± 0.9 | 68.2 ± 2.5 | **69.8 ± 1.1** |
 | S2 vs S0 (Moderate) | PAR-VAE (LogReg) | 70.8 ± 1.2 | 66.5 ± 1.6 | 69.3 ± 2.0 | **74.6 ± 0.8** |
@@ -101,73 +171,6 @@ R² drop from 0.972 → 0.320 quantifies the scanner calibration gap (ΔHU = 482
 
 ---
 
-## Installation & Setup
-
-### Prerequisites
-- **Python:** 3.11+
-- **CUDA:** 12.4+ (for GPU support)
-- **System:** Linux/macOS/Windows with 16GB+ RAM, GPU with 8GB+ VRAM recommended
-
-### Installation Steps
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yourusername/PAR-VAE.git
-   cd PAR-VAE
-   ```
-
-2. **Create virtual environment:**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Verify installation:**
-   ```bash
-   python -c "import torch; print(f'PyTorch version: {torch.__version__}')"
-   python -c "from src.models import VAE; print('PAR-VAE imported successfully')"
-   ```
-
----
-
-## Quick Start
-
-### 1. Download Data
-
-Download MosMedData (primary) and COVID-CT-MD (transfer) datasets:
-```bash
-# Create data directory structure
-mkdir -p data/{mosmeddata,covid_ct_md}
-
-# Place dataset files in appropriate directories
-# Expected structure:
-# data/
-#   └── mosmeddata/
-#       ├── train.csv
-#       ├── val.csv
-#       └── test.csv
-```
-
-
-```
-
-**3-Phase Annealing Schedule:**
-
-| Phase | Epochs | β | λ | Purpose |
-|-------|--------|---|---|---------|
-| Physics-First | 0–20 | 10⁻⁴ → 2·10⁻⁴ | 1.5 | Prevent posterior collapse |
-| Gradual Balance | 20–40 | 2·10⁻⁴ → 5·10⁻⁴ | 1.5 → 3.0 | Tighten physics supervision |
-| Fine-Tune | 40–50 | 5·10⁻⁴ | 3.0 | Maximise physics alignment |
-
-Healthy KL ≈ 15–17 confirmed across all seeds and cohorts. Collapse threshold: KL < 5.
-
----
-
 ## Ablation Studies
 
 ### Annealing Schedule
@@ -179,200 +182,7 @@ Healthy KL ≈ 15–17 confirmed across all seeds and cohorts. Collapse threshol
 | High λ early | ≈ 15 | Attribute lock-in, poor reconstruction |
 | **3-phase (ours)** | **≈ 15** | **Stable, generalisable alignment** |
 
-### Latent Dimensionality
-
-| Dimensions | Val R² | Test R² | Gap | Assessment |
-|------------|--------|---------|-----|------------|
-| 64 | — | — | — | Undercapacity |
-| **85** | **0.969** | **0.972** | **0.003** | **Optimal** |
-| 96 | — | — | 0.056 | Overfitting |
-
 ---
-
-## Methodology
-
-### Datasets
-- **MosMedData (Primary):** 1,110 patients, 5-level CT severity stratification, Centre for Diagnostics and Telemedicine, Moscow
-- **COVID-CT-MD (Transfer):** Independent multi-institutional DICOM cohort for cross-scanner evaluation
-
-### Cohort Construction
-
-| Label | Severity | GGO Involvement | Slices |
-|-------|---------|----------------|--------|
-| S0 | Normal (CT-0) | 0% | — |
-| S1 | Mild (CT-1) | < 25% | 5,500 balanced |
-| S2 | Moderate (CT-2) | 25–50% | 1,700 balanced |
-| S3 | Severe (CT-3) | 50–75% | 1,760 balanced |
-
-Volume-level 70/15/15 train/val/test split — all slices from one patient confined to one split. Chi-square split balance confirmed (p = 0.521).
-
-### 14 Physics Features
-
-Grounded in X-ray attenuation physics (HU scale):
-
-| Category | Features |
-|----------|---------|
-| Tissue Density (7) | Mean HU, Std HU, p10, p25, p50, p75, p90 |
-| Lung Geometry (2) | Mask area, fractional occupancy |
-| Boundary Sharpness (2) | Sobel gradient mean, Sobel gradient std |
-| Texture (3) | GLCM contrast, homogeneity, entropy |
-
-### 9-Stage Data Integrity Protocol
-
-| Check | Result |
-|-------|--------|
-| File integrity | 0 missing files |
-| HU range verification | Mean −614.9 ± 79.1 HU, zero outliers |
-| Mask integrity | 0 non-diagnostic slices |
-| Slice sampling consistency | 21.1/patient (S1), 29.3/patient (S2) |
-| Physics feature validation | ΔHU ≈ 30 (S1 vs S0) |
-| Outlier detection (IQR) | < 4% across all 14 features |
-| Image quality audit | 5.0% flagged at 5th percentile |
-| Split balance | Chi-square p = 0.521 |
-| Severity gradient | Mann-Whitney p < 0.0001 all features |
-
----
-
-## Installation
-
-```bash
-pip install -r requirements.txt
-```
-
-Key dependencies:
-```
-python==3.11
-torch==2.6.0+cu124
-numpy==1.26.4
-scikit-learn==1.2.2
-nibabel==5.3.2
-pydicom==2.4.4
-SimpleITK==2.4.1
-opencv-python==4.12.0
-```
-
----
-
-## Repository Structure
-
-Research-grade organization following scientific standards and best practices:
-
-```
-PAR-VAE/
-├── README.md                          # Main documentation
-├── LICENSE                            # MIT License
-├── requirements.txt                   # Python dependencies
-├── setup.py                          # Package installation
-│
-├── src/                              # Core source code (research-grade module)
-│   ├── __init__.py
-│   ├── models/                       # Model architectures
-│   │   ├── __init__.py
-│   │   ├── vae.py                   # VAE architecture
-│   │   ├── regularizers.py          # Physics-based regularizers
-│   │   └── losses.py                # Custom loss functions
-│   │
-│   ├── data/                         # Data loading and preprocessing
-│   │   ├── __init__.py
-│   │   ├── dataset.py               # PyTorch Dataset classes
-│   │   ├── loaders.py               # DataLoader utilities
-│   │   └── preprocessing.py         # HU normalization, augmentation
-│   │
-│   ├── utils/                        # Utility functions
-│   │   ├── __init__.py
-│   │   ├── physics.py               # 14 physics feature extraction
-│   │   ├── metrics.py               # Evaluation metrics
-│   │   ├── visualization.py         # Plotting and visualization
-│   │   └── config.py                # Configuration class
-│   │
-│   └── evaluation/                   # Evaluation pipelines
-│       ├── __init__.py
-│       ├── classifier.py            # LogReg/SVM classifiers
-│       ├── cross_validation.py      # Multi-seed validation
-│       └── transfer.py              # Cross-scanner transfer evaluation
-│
-├── scripts/                          # Standalone executables
-│   ├── train_parvae.py              # Main training script
-│   ├── evaluate_model.py            # Evaluation script
-│   ├── extract_features.py          # Physics feature extraction
-│   ├── covid_ct_md_evaluation.py    # Transfer learning evaluation
-│   └── data_integrity_checks.py     # Data validation
-│
-├── notebooks/                        # Jupyter notebooks for exploration
-│   ├── 01_data_exploration.ipynb    # EDA and visualization
-│   ├── 02_model_training.ipynb      # Training pipeline
-│   ├── 03_physics_validation.ipynb  # Physics feature validation
-│   ├── 04_ablation_studies.ipynb    # Annealing & latent dim ablations
-│   └── 05_transfer_evaluation.ipynb # COVID-CT-MD transfer results
-│
-├── configs/                          # Configuration files
-│   ├── parvae_default.yaml          # Default training config
-│   ├── parvae_s1.yaml               # S1 (mild) task config
-│   ├── parvae_s2.yaml               # S2 (moderate) task config
-│   ├── parvae_s3.yaml               # S3 (severe) task config
-│   └── transfer_learning.yaml       # Transfer learning config
-│
-├── experiments/                      # Results and experiment tracking
-│   ├── mosmeddata/                  # MosMedData in-domain results
-│   │   ├── s1_analysis/
-│   │   ├── s2_analysis/
-│   │   └── s3_analysis/
-│   ├── covid_ct_md/                 # COVID-CT-MD transfer results
-│   └── ablation_studies/            # Annealing schedule & latent dim
-│
-├── data/                             # Data and splits (not in repo)
-│   ├── mosmeddata/
-│   │   ├── train.csv
-│   │   ├── val.csv
-│   │   └── test.csv
-│   └── covid_ct_md/                 # External evaluation data
-│       ├── train.csv
-│       ├── val.csv
-│       └── test.csv
-│
-├── pretrained_models/                # Model checkpoints
-│   ├── parvae_s1_seed_*.pth
-│   ├── parvae_s2_seed_*.pth
-│   ├── parvae_s3_seed_*.pth
-│   └── transfer_learned/
-│
-├── docs/                             # Documentation
-│   ├── INSTALLATION.md               # Detailed setup
-│   ├── QUICKSTART.md                 # Getting started guide
-│   ├── API.md                        # API documentation
-│   ├── REPRODUCIBILITY.md            # Reproduction steps
-│   ├── DATASET.md                    # Dataset information
-│   │
-│   ├── figures/                      # Publication figures
-│   │   ├── architecture.png
-│   │   ├── physics_features.png
-│   │   └── results_comparison.png
-│   │
-│   └── papers/                       # Reference papers
-│       └── references.bib
-│
-├── assets/                           # Images for README
-│   └── Architecture_PARVAE.png
-│
-└── .gitignore                        # Git ignore patterns
-```
-
-### Directory Descriptions
-
-| Directory | Purpose | Contents |
-|-----------|---------|----------|
-| `src/` | Research Python module | Core algorithms, data handling, utilities |
-| `scripts/` | Executable entry points | Training, evaluation, data processing |
-| `notebooks/` | Interactive exploration | Jupyter notebooks for analysis & visualization |
-| `configs/` | Training configurations | YAML files for reproducible experiments |
-| `experiments/` | Results & tracking | Model outputs, metrics, logs per experiment |
-| `data/` | Dataset splits | CSV reference files (data not in repo) |
-| `pretrained_models/` | Model checkpoints | Trained weights for reproduction & transfer |
-| `docs/` | Documentation & figures | Guides, API docs, publication-ready figures |
-| `assets/` | README images | Supporting media for documentation |
-
----
-
 
 ## Acknowledgements
 
