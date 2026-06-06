@@ -17,7 +17,7 @@
 
 When a physics-grounded model underperforms a black-box CNN on COVID-19 CT classification, is the gap a modeling failure — or a fundamental biological property of the disease?
 
-**Our answer: The ceiling is biological, not computational.**
+**Our answer: The ceiling might be Biological at Lower severity instances**
 
 ---
 
