@@ -1,6 +1,6 @@
 # Physics Attribute-Regularized VAE (PAR-VAE)
 
-## A Physics-Constrained Generative Audit of CT Severity Classification
+## A Physics-Constrained Generative Audit of CT Severity Classification (Accepted MIUA 2026)
 
 ![Model](https://img.shields.io/badge/Model-PAR--VAE-blue)
 ![Dataset](https://img.shields.io/badge/Dataset-MosMedData%20%2B%20COVID--CT--MD-orange)
